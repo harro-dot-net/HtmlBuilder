@@ -170,6 +170,16 @@ public sealed class H1 : Element
     public H1() : base("h1") { }
     public H1(params ReadOnlySpan<HtmlAttribute> attributes) : base("h1", attributes) { }
 }
+public sealed class H2 : Element
+{
+    public H2() : base("h2") { }
+    public H2(params ReadOnlySpan<HtmlAttribute> attributes) : base("h2", attributes) { }
+}
+public sealed class H3 : Element
+{
+    public H3() : base("h3") { }
+    public H3(params ReadOnlySpan<HtmlAttribute> attributes) : base("h3", attributes) { }
+}
 public sealed class Head : Element
 {
     public Head() : base("head") { }
