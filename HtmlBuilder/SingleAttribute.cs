@@ -1,4 +1,4 @@
-﻿namespace HtmlRenderer;
+﻿namespace HtmlBuilder;
 
 internal sealed class SingleAttribute((string Key, string Value) Attribute) : IAttributeBuilder
 {

@@ -1,4 +1,4 @@
-﻿namespace HtmlRenderer;
+﻿namespace HtmlBuilder;
 
 public sealed class Document(IContentRenderer content) : IRenderer
 {

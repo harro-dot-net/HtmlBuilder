@@ -1,4 +1,4 @@
-﻿namespace HtmlRenderer;
+﻿namespace HtmlBuilder;
 
 public interface IAttributeBuilder : IAttributeRenderer
 {

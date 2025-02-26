@@ -1,7 +1,7 @@
 ﻿
 global using HtmlAttribute = (string Key, string Value);
 
-namespace HtmlRenderer;
+namespace HtmlBuilder;
 
 public static class HtmlAttributeExtensions
 {

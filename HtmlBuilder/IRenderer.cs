@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace HtmlRenderer;
+namespace HtmlBuilder;
 
 public interface IRenderer
 {

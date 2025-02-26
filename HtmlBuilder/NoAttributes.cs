@@ -1,4 +1,4 @@
-﻿namespace HtmlRenderer;
+﻿namespace HtmlBuilder;
 
 internal sealed class NoAttributes : IAttributeBuilder
 {

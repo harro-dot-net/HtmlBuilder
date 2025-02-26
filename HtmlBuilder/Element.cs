@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace HtmlRenderer;
+namespace HtmlBuilder;
 
 public class Element : IEnumerable, IContentBuilder, IAttributeBuilder
 {

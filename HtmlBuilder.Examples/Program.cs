@@ -1,5 +1,5 @@
-﻿using HtmlRenderer;
-using static HtmlRenderer.CommonAttributes;
+﻿using HtmlBuilder;
+using static HtmlBuilder.CommonAttributes;
 
 // Create simple projection
 static IContentBuilder UnorderedList(IEnumerable<string> items) =>
