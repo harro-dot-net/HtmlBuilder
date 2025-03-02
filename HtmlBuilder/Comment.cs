@@ -1,8 +1,8 @@
 ﻿namespace HtmlBuilder;
 
-public sealed class Comment(string text) : IContentRenderer
+public sealed class Comment(string Text) : IContentRenderer
 {
-    private readonly Text _textContent = new(text);
+    private readonly Text _textContent = new(Text);
 
     public void Render(Action<string> append)
     {

@@ -1,10 +1,10 @@
 ﻿namespace HtmlBuilder;
 
-public sealed class Document(IContentRenderer content) : IRenderer
+public sealed class Document(IContentRenderer Content) : IRenderer
 {
     public void Render(Action<string> append)
     {
         append("<!doctype html>\n");
-        content.Render(append);
+        Content.Render(append);
     }
 }
