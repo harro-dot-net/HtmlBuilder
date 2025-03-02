@@ -4,9 +4,9 @@ HtmlBuilder is a simple C# library for generating HTML documents directly from C
 
 ## Motivation
 
-HTML code and source code normally don't mix very well. Frameworks like Razor require specialized syntax, which can become complicated for simple use cases. Other libraries like HtmlContentBuilder in ASP.Net Core are often clunky to use, making the code harder to reason about.
+HTML code and C# source code don't mix very well. Frameworks like Razor require specialized syntax and forces you to use a certain project structure, which can become complicated for simple use cases like generating an HTML email or report. Other libraries like HtmlContentBuilder in ASP.Net Core are often clunky to use, making the code hard to reason about.
 
-This library addresses these issues by providing a simple, easy-to-read way of generating HTML directly in C#, without all the syntactic clutter or complexity.
+This library provides a simple, easy-to-read and easy-to-write way of generating HTML directly in C#, without all the syntactic clutter or complexity.
 
 ## Philosophy / Design Goals
 
@@ -19,31 +19,25 @@ This library addresses these issues by providing a simple, easy-to-read way of g
 - The library should be small, simple, efficient and extensible — rather than solving every possible use case.
 - No external dependencies.
 
-## Features
-
-- Generate HTML with pure C# code.
-- Support for attributes and nested content within HTML elements.
-- Simple syntax for creating and nesting HTML structures.
-- No need for templating engines or external dependencies.
-- Easy integration with existing C# projects.
-
 ## Example code
 ```csharp
-// project a collection of strings to an unordered list
+using HtmlBuilder;
+using static HtmlBuilder.CommonAttributes;
+
+// Project a collection of strings to an unordered list
 static IContentBuilder UnorderedList(IEnumerable<string> items) =>
     new Ul() {
         items.Select(static item => new Li { item })
     };
 
 var html =
-    // Attributes a passed as a tuple with 2 strings, a key and (optionally) a value.
-    new Html(("dir", "ltr"),("lang", "en")) 
+    // Attributes a passed as a tuple with 2 strings, a key and a value (which may be empty).
+    new Html(("dir", "ltr"), ("lang", "en"))
     {
-        // Nestes elements or selfclosing can be added through collection initializers
+        // Nested elements or selfclosing can be added through collection initializers.
         new Head
         {
-            // Strings also can be passed through collection initializers, these will be html-encoded by default
-            new Title { "Example Page" } 
+            new Title { "Example Page" }
         },
         new Body
         {
@@ -51,6 +45,9 @@ var html =
             new H2 { "Desing goals " },
             new P
             {
+                "This library has the following design goals:",
+                // You can pass a collection of elements as an item in the collection initializer.
+                // This makes it simple to add projections of data (see UnorderedList method above).
                 UnorderedList([
                     "You should be able to create HTML by writing pure C# code; no templating, no engines, no magic strings.",
                     "It should be easy to hand-write nested HTML structures in code.",
@@ -58,62 +55,61 @@ var html =
                     "It should be easy to combine hand-written and generated HTML structures.",
                     "The code should contain as little syntactic clutter as possible.",
                     "The code should be easy to read and resemble the HTML it generates, making it obvious what the HTML output will be just by looking at the code.",
-                    "The library is small, simple, and extensible—rather than solving every possible use case.",
+                    "The library should be small, simple, efficient and extensible; rather than solving every possible use case.",
                     "No external dependencies."
                 ])
             },
-            new H2 { "Features" },
+            new H2 { "Examples" },
             new P
             {
-                UnorderedList([
-                    "Generate HTML with pure C# code.",
-                    "Support for attributes and nested content within HTML elements.",
-                    "Simple syntax for creating and nesting HTML structures.",
-                    "No need for templating engines or external dependencies.",
-                    "Easy integration with existing C# projects."
-                ])
+                // You also directly pass strings in the collection initializer as content, these will be encoded by default.
+                "This <br> tag will be encoded and displayed in the page.",
+            },
+            new P
+            {
+                // You can also embed raw HTML content from another source
+                new Raw("This text will contain an actual <br> line break in the HTML output.")
+            },
+            new P {
+                // The are some shortcuts (Id, Class, Href, Required, etc.) in the CommonAttributes class
+                // that make passing attributes somewhat simpler and readable
+                "This library is available on ", new A(Href("https://github.com/harro-dot-net/HtmlBuilder")){ "Github" },
             }
         }
     };
 
 var htmlString = new Document(html).Render();
-
 ```
-This will generate the following output*:
-(the actual output is not formatted with the extra whitespace and indentation)
+This will generate the following output:  
+(note: the actual output is not formatted with the extra whitespace and indentation)
 ```html
 <!doctype html>
 <html dir="ltr" lang="en">
-    <head>
-        <title>Example Page</title>
-    </head>
-    <body>
-        <h1>HTML builder</h1>
-        <h2>Desing goals </h2>
-        <p>
-        <ul>
-            <li>You should be able to create HTML by writing pure C# code; no templating, no engines, no magic strings.</li>
-            <li>It should be easy to hand-write nested HTML structures in code.</li>
-            <li>It should be easy to generate HTML structures by code.</li>
-            <li>It should be easy to combine hand-written and generated HTML structures.</li>
-            <li>The code should contain as little syntactic clutter as possible.</li>
-            <li>The code should be easy to read and resemble the HTML it generates, making it obvious what the HTML output
-                will be just by looking at the code.</li>
-            <li>The library is small, simple, and extensible&#x2014;rather than solving every possible use case.</li>
-            <li>No external dependencies.</li>
-        </ul>
-        </p>
-        <h2>Features</h2>
-        <p>
-        <ul>
-            <li>Generate HTML with pure C# code.</li>
-            <li>Support for attributes and nested content within HTML elements.</li>
-            <li>Simple syntax for creating and nesting HTML structures.</li>
-            <li>No need for templating engines or external dependencies.</li>
-            <li>Easy integration with existing C# projects.</li>
-        </ul>
-        </p>
-    </body>
+<head>
+    <title>Example Page</title>
+</head>
+<body>
+    <h1>HTML builder</h1>
+    <h2>Desing goals </h2>
+    <p>This library has the following design goals:
+    <ul>
+        <li>You should be able to create HTML by writing pure C# code; no templating, no engines, no magic strings.</li>
+        <li>It should be easy to hand-write nested HTML structures in code.</li>
+        <li>It should be easy to generate HTML structures by code.</li>
+        <li>It should be easy to combine hand-written and generated HTML structures.</li>
+        <li>The code should contain as little syntactic clutter as possible.</li>
+        <li>The code should be easy to read and resemble the HTML it generates, making it obvious what the HTML output
+            will be just by looking at the code.</li>
+        <li>The library should be small, simple, efficient and extensible; rather than solving every possible use case.
+        </li>
+        <li>No external dependencies.</li>
+    </ul>
+    </p>
+    <h2>Examples</h2>
+    <p>This &lt;br&gt; tag will be encoded and displayed in the page.</p>
+    <p>This text will contain an actual <br> line break in the HTML output.</p>
+    <p>This library is available on <a href="https://github.com/harro-dot-net/HtmlBuilder">Github</a></p>
+</body>
 </html>
 ```
 
