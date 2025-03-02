@@ -99,10 +99,8 @@ This will generate the following output:
         <li>It should be easy to generate HTML structures by code.</li>
         <li>It should be easy to combine hand-written and generated HTML structures.</li>
         <li>The code should contain as little syntactic clutter as possible.</li>
-        <li>The code should be easy to read and resemble the HTML it generates, making it obvious what the HTML output
-            will be just by looking at the code.</li>
-        <li>The library should be small, simple, efficient and extensible; rather than solving every possible use case.
-        </li>
+        <li>The code should be easy to read and resemble the HTML it generates, making it obvious what the HTML output will be just by looking at the code.</li>
+        <li>The library should be small, simple, efficient and extensible; rather than solving every possible use case.</li>
         <li>No external dependencies.</li>
     </ul>
     </p>
