@@ -1,12 +1,13 @@
-﻿
-namespace HtmlBuilder;
+﻿namespace HtmlBuilder;
 
 public sealed class Comment(string text) : IContentRenderer
 {
+    private readonly Text _textContent = new(text);
+
     public void Render(Action<string> append)
     {
         append("<!-- ");
-        append(text);
+        _textContent.Render(append);
         append(" -->");
     }
 }
