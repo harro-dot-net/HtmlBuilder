@@ -1,74 +1,60 @@
 ﻿using HtmlBuilder;
 using static HtmlBuilder.CommonAttributes;
 
-// project a string array into an unordered list
+// Project a collection of strings to an unordered list
 static IContentBuilder UnorderedList(IEnumerable<string> items) =>
     new Ul() {
         items.Select(static item => new Li { item })
     };
 
 var html =
-    new Html(("dir", "ltr"), ("lang", "en")) {
-        new Head {
-            new Title { "HtmlBuilder" },
+    // Attributes a passed as a tuple with 2 strings, a key and a value (which may be empty).
+    new Html(("dir", "ltr"), ("lang", "en"))
+    {
+        // Nested elements or selfclosing can be added through collection initializers.
+        new Head
+        {
+            new Title { "Example Page" }
         },
-        new Body(("style", "font-family: sans-serif;")) {
-            new H1 { "Motivation "},
-            new P {
-                "HTML code and source code normally don't mix very well", new Br(),
-                "Generating an HTML document from C# code is a chore", new Br(),
-                "Frameworks like Razor often force you to use a certain code organization, and require specialized syntax and make things too complicated for simple use-cases", new Br(),
-                "Libraries like HtmlContentBuilder in ASP.Net Core are often clunky to use, and the code can sometimes be hard to reason about", new Br(),
-            },
-            new H1 { "Philosophy / Design goals" },
-            new P {
+        new Body
+        {
+            new H1 { "HTML builder" },
+            new H2 { "Desing goals " },
+            new P
+            {
+                "This library has the following design goals:",
+                // You can pass a collection of elements as an item in the collection initializer.
+                // This makes it simple to add projections of data (see UnorderedList method above).
                 UnorderedList([
-                    "You should be able to create HTML by writing pure C# code, no templating, no engines, no magic strings",
-                    "It should be easy to hand-write nested HTML structures in code",
-                    "It should be easy to generate HTML structures by code",
-                    "It should be easy to combine hand-written and generated HTML structures",
-                    "Code should contain as little syntactic clutter as possible",
-                    "Code should be easy to read, code should look like the HTML it generates and it should be obvious what the HTML output will be just by looking at the code",
-                    "The library is small and simple and should be extensible rather than trying to solve every possible use-case",
-                    "No external dependencies, please",
+                    "You should be able to create HTML by writing pure C# code; no templating, no engines, no magic strings.",
+                    "It should be easy to hand-write nested HTML structures in code.",
+                    "It should be easy to generate HTML structures by code.",
+                    "It should be easy to combine hand-written and generated HTML structures.",
+                    "The code should contain as little syntactic clutter as possible.",
+                    "The code should be easy to read and resemble the HTML it generates, making it obvious what the HTML output will be just by looking at the code.",
+                    "The library should be small, simple, efficient and extensible; rather than solving every possible use case.",
+                    "No external dependencies."
                 ])
             },
-            new H1 { "How it works" },
-            new H2 { "Attributes" },
-            new P {
-                "Attributes are basically tuples with 2 strings, a key and a value", new Br(),
-                "Any number of attributes can be passed through the constructor of HTML elements or self-closing tags", new Br(),
+            new H2 { "Examples" },
+            new P
+            {
+                // You also directly pass strings in the collection initializer as content, these will be encoded by default.
+                "This <br> tag will be encoded and displayed in the page.",
             },
-            new H2 { "Content" },
-            new P {
-                "Collection initializers are (ab)used to populate HTML elements with nested content", new Br(),
-                "This makes it possible to easily nest HTML elements and results in code that should be relatively easy to read", new Br(),
-                "Different types can be passed through the collection initializers", new Br(),
-                "These include:",
-                UnorderedList([
-                    "Any HTML element or self-closing tag",
-                    "Any collection of any HTML element or self-closing tag",
-                    "A string, which will be HTML encoded by default",
-                ]),
-                "These types can be mixed together in a single collection initializer"
+            new P
+            {
+                // You can also embed raw HTML content from another source.
+                new Raw("This text will contain an actual <br> line break in the HTML output.")
             },
-            new H2 { "Generating output" },
-            new P {
-                "To generate the output, a much simplified version of the 'visitor' pattern is used", new Br(),
-                "Output is generated by passing an Action<string> along from the parent to the children", new Br(),
-                "Every item (HTML element, self-closing tag or text) in the tree structure calls that action for each piece of string it wants to render", new Br(),
-                "There is no intermediate string manipulation/interpolation/concatenation, only adding pieces of string via the Action in one go", new Br(),
-                "There is also a parameterless Render() extension method that appends all pieces to a StringBuilder, and returns the resulting string", new Br(),
-                "If you prefer, you can pass a lambda that appends the strings to a TextWriter or stream, for example", new Br(),
-            },
-            new P {
-                "This library is available on ", new A(Href("https://github.com/harro-dot-net/HtmlBuilder")){ "GitHub" },
+            new P
+            {
+                // The are some shortcuts (Id, Class, Href, Required, etc.) in the CommonAttributes class
+                // that make passing attributes somewhat simpler and readable.
+                "This library is available on ", new A(Href("https://github.com/harro-dot-net/HtmlBuilder")){ "Github" },
             }
         }
     };
-
-// render html directly to console
-html.Render(Console.Write);
 
 // create a html document and convert it to a string
 var htmlString = new Document(html).Render();
