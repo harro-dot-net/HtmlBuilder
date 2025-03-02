@@ -70,7 +70,8 @@ var html =
                 // You can also embed raw HTML content from another source
                 new Raw("This text will contain an actual <br> line break in the HTML output.")
             },
-            new P {
+            new P
+            {
                 // The are some shortcuts (Id, Class, Href, Required, etc.) in the CommonAttributes class
                 // that make passing attributes somewhat simpler and readable
                 "This library is available on ", new A(Href("https://github.com/harro-dot-net/HtmlBuilder")){ "Github" },
