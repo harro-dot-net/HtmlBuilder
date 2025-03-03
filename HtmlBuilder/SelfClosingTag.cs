@@ -10,7 +10,7 @@ public class SelfClosingTag : IContentRenderer
         _tag = tag;
     }
 
-    public SelfClosingTag(string tag, params ReadOnlySpan<HtmlAttribute> attributes)
+    public SelfClosingTag(string tag, params IEnumerable<HtmlAttribute> attributes)
     {
         _tag = tag;
 

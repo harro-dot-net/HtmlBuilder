@@ -13,7 +13,7 @@ public class Element : IEnumerable, IContentBuilder
         _tag = tag;
     }
 
-    public Element(string tag, params ReadOnlySpan<HtmlAttribute> attributes)
+    public Element(string tag, params IEnumerable<HtmlAttribute> attributes)
     {
         _tag = tag;
 
