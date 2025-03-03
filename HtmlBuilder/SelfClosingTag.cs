@@ -26,7 +26,7 @@ public class SelfClosingTag : IContentRenderer
         return this;
     }
 
-    public SelfClosingTag AddAttributes(params Span<HtmlAttribute> attributes)
+    public SelfClosingTag AddAttributes(params IEnumerable<HtmlAttribute> attributes)
     {
         foreach (var a in attributes)
         {

@@ -2,7 +2,7 @@
 
 namespace HtmlBuilder;
 
-public class Element : IEnumerable, IContentBuilder, IAttributeBuilder
+public class Element : IEnumerable, IContentBuilder
 {
     private readonly string _tag;
     private IAttributeBuilder _attributes = NoAttributes.Instance;
@@ -29,9 +29,29 @@ public class Element : IEnumerable, IContentBuilder, IAttributeBuilder
         return this;
     }
 
-    public IAttributeBuilder AddAttribute(HtmlAttribute attribute)
+    public IContentBuilder AddContent(params IEnumerable<IContentRenderer> contentRenderers)
+    {
+        foreach (var contentRenderer in contentRenderers)
+        {
+            _content = _content.AddContent(contentRenderer);
+        }
+
+        return this;
+    }
+
+    public Element AddAttribute(HtmlAttribute attribute)
     {
         _attributes = _attributes.AddAttribute(attribute);
+        return this;
+    }
+
+    public Element AddAttributes(params IEnumerable<HtmlAttribute> attributes)
+    {
+        foreach(var attribute in attributes)
+        {
+            _attributes = _attributes.AddAttribute(attribute);
+        }
+
         return this;
     }
 
