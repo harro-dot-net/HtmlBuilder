@@ -58,18 +58,24 @@ app.MapGet("/", () =>
                 new H1 { "Table example" },
                 new Table
                 {
-                    new Tr
+                    new Thead
                     {
-                        new Th { "number" },
-                        new Th { "squared" },
-                    },
-                    Enumerable.Range(1, 10).Select(number =>
                         new Tr
                         {
-                            new Td { number.ToString() },
-                            new Td { (number * number).ToString()},
-                        }
-                    )
+                            new Th { "number" },
+                            new Th { "squared" },
+                        },
+                    },
+                    new Tbody
+                    {
+                        Enumerable.Range(1, 10).Select(number =>
+                            new Tr
+                            {
+                                new Td { number.ToString() },
+                                new Td { (number * number).ToString()},
+                            }
+                        )
+                    },
                 },
                 new H1 { "Link" },
                 new P
