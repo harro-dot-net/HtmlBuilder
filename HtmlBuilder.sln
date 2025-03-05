@@ -5,7 +5,7 @@ VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlBuilder", "HtmlBuilder\HtmlBuilder.csproj", "{982209F5-2235-4CBF-826E-F72C555C3C38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlBuilder.Examples", "HtmlBuilder.Examples\HtmlBuilder.Examples.csproj", "{C00000AD-6F3E-49AE-B314-3A031272B3A0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlBuilder.Examples", "HtmlBuilder.Examples\HtmlBuilder.Examples.csproj", "{F195973A-5976-4F3D-B325-0A49FF57D2FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{982209F5-2235-4CBF-826E-F72C555C3C38}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{982209F5-2235-4CBF-826E-F72C555C3C38}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{982209F5-2235-4CBF-826E-F72C555C3C38}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C00000AD-6F3E-49AE-B314-3A031272B3A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C00000AD-6F3E-49AE-B314-3A031272B3A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C00000AD-6F3E-49AE-B314-3A031272B3A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C00000AD-6F3E-49AE-B314-3A031272B3A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F195973A-5976-4F3D-B325-0A49FF57D2FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F195973A-5976-4F3D-B325-0A49FF57D2FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F195973A-5976-4F3D-B325-0A49FF57D2FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F195973A-5976-4F3D-B325-0A49FF57D2FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

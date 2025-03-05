@@ -1,62 +1,88 @@
-﻿using HtmlBuilder;
+using HtmlBuilder;
 using static HtmlBuilder.CommonAttributes;
 
-// Project a collection of strings to an unordered list
-static IContentBuilder UnorderedList(IEnumerable<string> items) =>
-    new Ul() {
-        items.Select(static item => new Li { item })
-    };
+var builder = WebApplication.CreateBuilder(args);
 
-var html =
-    // Attributes a passed as a tuple with 2 strings, a key and a value (which may be empty).
-    new Html(("dir", "ltr"), ("lang", "en"))
-    {
-        // Nested elements or selfclosing can be added through collection initializers.
-        new Head
+var app = builder.Build();
+
+app.UseHttpsRedirection();
+
+app.MapGet("/", () =>
+{
+    var html =
+        // Attributes a passed as a tuple with 2 strings, a key and a value (which may be empty).
+        new Html(("dir", "ltr"), ("lang", "en"))
         {
-            new Title { "Example Page" }
-        },
-        new Body
-        {
-            new H1 { "HTML builder" },
-            new H2 { "Desing goals " },
-            new P
+            // Nested elements or selfclosing can be added through collection initializers.
+            new Head
             {
-                "This library has the following design goals:",
-                // You can pass a collection of elements as an item in the collection initializer.
-                // This makes it simple to add projections of data (see UnorderedList method above).
-                UnorderedList([
-                    "You should be able to create HTML by writing pure C# code; no templating, no engines, no magic strings.",
-                    "It should be easy to hand-write nested HTML structures in code.",
-                    "It should be easy to generate HTML structures by code.",
-                    "It should be easy to combine hand-written and generated HTML structures.",
-                    "The code should contain as little syntactic clutter as possible.",
-                    "The code should be easy to read and resemble the HTML it generates, making it obvious what the HTML output will be just by looking at the code.",
-                    "The library should be small, simple, efficient and extensible; rather than solving every possible use case.",
-                    "No external dependencies."
-                ])
+                new Title { "Getting started" },
+                new Meta(("charset","utf-8")),
+                new Meta(("name","viewport"),("content","width=device-width, initial-scale=1")),
+                new Link(
+                    ("href","https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"),
+                    ("rel","stylesheet"),
+                    ("integrity","sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"),
+                    ("crossorigin", "anonymous")
+                ),
+                new Script(
+                    ("src","https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"),
+                    ("integrity","sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"),
+                    ("crossorigin", "anonymous")
+                )
             },
-            new H2 { "Examples" },
-            new P
+            new Body
             {
-                // You also directly pass strings in the collection initializer as content, these will be encoded by default.
-                "This <br> tag will be encoded and displayed in the page.",
-            },
-            new P
-            {
-                // You can also embed raw HTML content from another source.
-                new Raw("This text will contain an actual <br> line break in the HTML output.")
-            },
-            new P
-            {
-                // The are some shortcuts (Id, Class, Href, Required, etc.) in the CommonAttributes class
-                // that make passing attributes somewhat simpler and readable.
-                "This library is available on ", new A(Href("https://github.com/harro-dot-net/HtmlBuilder")){ "Github" },
+                new H1{ "Text example" },
+                new P
+                {
+                    // You directly pass strings in the collection initializer as content, these will be encoded by default.
+                    "The <br> tag in this line will be encoded and show up in the html page."
+                },
+                new P
+                {
+                    // You can embed raw HTML content from a string.
+                    new Raw("This text will contain an actual <br> line break in the HTML output."),
+                },
+                new H1 { "List example" },
+                new Ul
+                {
+                    // You can pass a collection of elements as an item in the collection initializer.
+                    // This makes it simple to add projections of data.
+                    Enumerable.Range(1, 10).Select(number =>
+                        // Each element is rendered in sequence, so no intermediate
+                        // string interpolation or concatenation is needed.
+                        new Li { number.ToString(), " squared equals ", (number * number).ToString() }
+                    )
+                },
+                new H1 { "Table example" },
+                new Table
+                {
+                    new Tr
+                    {
+                        new Th { "number" },
+                        new Th { "squared" },
+                    },
+                    Enumerable.Range(1, 10).Select(number =>
+                        new Tr
+                        {
+                            new Td { number.ToString() },
+                            new Td { (number * number).ToString()},
+                        }
+                    )
+                },
+                new H1 { "Link" },
+                new P
+                {
+                    "Visit the project page on ", new A(Href("https://github.com/harro-dot-net/HtmlBuilder")){ "GitHub" }
+                },
             }
-        }
-    };
+        };
 
-// create a html document and convert it to a string
-var htmlString = new Document(html).Render();
+    // Wrapping the HTML element in a document will add a HTML5 DocType declaration.
+    // The Render method will convert the nested structure to a string.
+    return Results.Text(new Document(html).Render(), "text/html");
+});
 
-File.WriteAllText($"{DateTime.Now:yyyyMMddHHmmss}.html", htmlString);
+app.Run();
+
