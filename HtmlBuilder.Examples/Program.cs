@@ -10,7 +10,7 @@ app.UseHttpsRedirection();
 app.MapGet("/", () =>
 {
     var html =
-        // Attributes a passed as a tuple with 2 strings, a key and a value (which may be empty).
+        // Attributes a passed to the constructor as tuples with 2 strings, a key and a value (which may be empty).
         new Html(("dir", "ltr"), ("lang", "en"))
         {
             // Nested elements or selfclosing can be added through collection initializers.
@@ -77,7 +77,7 @@ app.MapGet("/", () =>
                         )
                     },
                 },
-                new H1 { "Link" },
+                new H1 { "Link example" },
                 new P
                 {
                     "Visit the project page on ", new A(Href("https://github.com/harro-dot-net/HtmlBuilder")){ "GitHub" }
