@@ -4,7 +4,7 @@ public sealed class Document(IContentRenderer Content) : IRenderer
 {
     public void Render(Action<string> append)
     {
-        append("<!doctype html>\n");
+        append("<!DOCTYPE html>\n");
         Content.Render(append);
     }
 }

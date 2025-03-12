@@ -15,4 +15,16 @@ public static class RendererExtensions
         renderer.Render(s => sb.Append(s));
         return sb.ToString();
     }
+
+    public static string Render(this IEnumerable<IRenderer> renderers)
+    {
+        StringBuilder sb = new();
+
+        foreach (var renderer in renderers)
+        {
+            renderer.Render(s => sb.Append(s));
+        }
+
+        return sb.ToString();
+    }
 }

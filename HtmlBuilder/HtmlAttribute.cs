@@ -1,7 +1,4 @@
-﻿
-global using HtmlAttribute = (string Key, string Value);
-
-namespace HtmlBuilder;
+﻿namespace HtmlBuilder;
 
 public static class HtmlAttributeExtensions
 {
