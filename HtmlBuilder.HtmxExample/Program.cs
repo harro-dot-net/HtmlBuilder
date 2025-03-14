@@ -13,36 +13,39 @@ app.UseAntiforgery();
 
 ScoreBoard scoreBoard = new();
 
-app.MapGet("/", GetPage);
-app.MapPost(ScoreBoard.Scores, scoreBoard.PostScore);
-app.MapGet(ScoreBoard.Scores, scoreBoard.GetScores);
+app.MapGet("/", GetMainPage);
+scoreBoard.MapEndpoints(app);
 app.Run();
 
-IResult GetPage(HttpContext context, [FromServices] IAntiforgery antiforgery)
+IResult GetMainPage(HttpContext context, [FromServices] IAntiforgery antiforgery)
 {
-    var html = CreateHtmxBootstrapPage(
+    var body = new Body
+    {
+        new H1(Class("text-center"))
+        {
+            "ScoreBoard"
+        },
+        new Div
+        {
+            scoreBoard.GetScoreTable(),
+        },
+        new Div(Class("d-flex justify-content-between align-items-center mb-4"))
+        {
+            scoreBoard.GetScoreForm(context, antiforgery),
+        },
+    };
+
+    var htmlDocument = CreateHtmxBootstrapPage(
         title: "ScoreBoard",
-        body: new Body {
-            new H1(Class("text-center"))
-            {
-                "ScoreBoard"
-            },
-            new Div
-            {
-                scoreBoard.GetScores(),
-            },
-            new Div(Class("d-flex justify-content-between align-items-center mb-4"))
-            {
-                scoreBoard.GetScoreForm(context, antiforgery),
-            },
-        }
+        body: body
     );
 
-    return Results.Text(new Document(html).Render(), "text/html");
+    return htmlDocument.ToHtmlResult();
 }
 
-static IContentRenderer CreateHtmxBootstrapPage(string title, Body body) =>
-    new Html(("dir", "ltr"), ("lang", "en"))
+static IRenderer CreateHtmxBootstrapPage(string title, Body body)
+{
+    var html = new Html(("dir", "ltr"), ("lang", "en"))
     {
         new Head
         {
@@ -56,6 +59,11 @@ static IContentRenderer CreateHtmxBootstrapPage(string title, Body body) =>
                 ("crossorigin", "anonymous")
             ),
             new Script(
+                ("src","https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"),
+                ("integrity","sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"),
+                ("crossorigin","anonymous")
+            ),
+            new Script(
                 ("src","https://unpkg.com/htmx.org@2.0.4/dist/htmx.js"),
                 ("integrity","sha384-oeUn82QNXPuVkGCkcrInrS1twIxKhkZiFfr2TdiuObZ3n3yIeMiqcRzkIcguaof1"),
                 ("crossorigin","anonymous")
@@ -63,3 +71,6 @@ static IContentRenderer CreateHtmxBootstrapPage(string title, Body body) =>
         },
         body
     };
+
+    return new Document(html);
+}

@@ -4,12 +4,12 @@ using static HtmlBuilder.CommonAttributes;
 
 namespace HtmlBuilder.HtmxExample;
 
-public class ScoreBoard
+public sealed class ScoreBoard
 {
-    public const string Scores = "/scores";
-    public const string ScoreList = "score-list";
+    private const string ScoresEndpoint = "/scores";
+    private const string ScoreList = "score-list";
 
-    public record HighScore(string Name, int Score);
+    internal sealed record HighScore(string Name, int Score);
 
     private IEnumerable<HighScore> _highScores = [
         new ("Mario", 10000),
@@ -24,7 +24,13 @@ public class ScoreBoard
         new ("Princess Peach", 1000),
     ];
 
-    public IResult PostScore([FromForm] HighScore highScore)
+    internal void MapEndpoints(WebApplication app)
+    {
+        app.MapPost(ScoresEndpoint, PostScore);
+        app.MapGet(ScoresEndpoint, GetScoreTable);
+    }
+
+    internal IResult PostScore([FromForm] HighScore highScore)
     {
         _highScores =
             _highScores
@@ -33,10 +39,10 @@ public class ScoreBoard
             .Take(10)
             .ToArray();
 
-        return Results.Text(GetScores().Render(), "text/html");
+        return GetScoreTable().ToHtmlResult();
     }
 
-    public IContentRenderer GetScores()
+    internal IContentRenderer GetScoreTable()
     {
         var scope_col = ("scope", "col");
         var scope_row = ("scope", "row");
@@ -66,12 +72,12 @@ public class ScoreBoard
         };
     }
 
-    public IContentRenderer GetScoreForm(HttpContext context, IAntiforgery antiforgery) =>
+    internal IContentRenderer GetScoreForm(HttpContext context, IAntiforgery antiforgery) =>
         new Form(("hx-post", "/scores"), ("hx-target", $"#{ScoreList}"))
         {
             new Input(TypeText, Id("new-name"), Name("Name"), Required, Class("form-control"), Placeholder("Enter name...")),
             new Input(TypeNumber, Id("new-score"), Name("Score"), Required, Class("form-control"), Placeholder("Enter score...")),
-            new Button(Class("btn btn-primary ms-2"), ("hx-post", Scores), ("hx-trigger","click"), ("hx-target", $"#{ScoreList}"))
+            new Button(Class("btn btn-primary ms-2"), ("hx-post", ScoresEndpoint), ("hx-trigger","click"), ("hx-target", $"#{ScoreList}"))
             {
                 "Add Score"
             },
