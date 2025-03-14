@@ -24,91 +24,190 @@ This library provides a simple, easy-to-read and easy-to-write way of generating
 using HtmlBuilder;
 using static HtmlBuilder.CommonAttributes;
 
-// Project a collection of strings to an unordered list
-static IContentBuilder UnorderedList(IEnumerable<string> items) =>
-    new Ul() {
-        items.Select(static item => new Li { item })
-    };
+var builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
+app.UseHttpsRedirection();
 
-var html =
-    // Attributes a passed as a tuple with 2 strings, a key and a value (which may be empty).
-    new Html(("dir", "ltr"), ("lang", "en"))
-    {
-        // Nested elements or selfclosing can be added through collection initializers.
-        new Head
+app.MapGet("/", () =>
+{
+    var html =
+        // Attributes are passed to the constructor as tuples with 2 strings, a key and a value.
+        // (An empty value is not rendered to the output).
+        // For many common attributes (like 'id', 'class' etc.) there are factory methods which makes it easier to type and read.
+        new Html(Dir("ltr"), Lang("en"))
         {
-            new Title { "Example Page" }
-        },
-        new Body
-        {
-            new H1 { "HTML builder" },
-            new H2 { "Desing goals " },
-            new P
+            // Nested elements or selfclosing can be added through collection initializers.
+            // This makes it easy to write nested structures.
+            // This way reading and writing a HTML document is very similar to
+            // reading and writing plain HTML.
+            new Head
             {
-                "This library has the following design goals:",
-                // You can pass a collection of elements as an item in the collection initializer.
-                // This makes it simple to add projections of data (see UnorderedList method above).
-                UnorderedList([
-                    "You should be able to create HTML by writing pure C# code; no templating, no engines, no magic strings.",
-                    "It should be easy to hand-write nested HTML structures in code.",
-                    "It should be easy to generate HTML structures by code.",
-                    "It should be easy to combine hand-written and generated HTML structures.",
-                    "The code should contain as little syntactic clutter as possible.",
-                    "The code should be easy to read and resemble the HTML it generates, making it obvious what the HTML output will be just by looking at the code.",
-                    "The library should be small, simple, efficient and extensible; rather than solving every possible use case.",
-                    "No external dependencies."
-                ])
+                new Title { "Getting started" },
+                new Meta(Charset("utf-8")),
+                new Meta(Name("viewport"), Content("width=device-width, initial-scale=1")),
+                new Link(
+                    Href("https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"),
+                    Rel("stylesheet"),
+                    ("integrity","sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"),
+                    ("crossorigin", "anonymous")
+                ),
+                new Script(
+                    Src("https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"),
+                    ("integrity","sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"),
+                    ("crossorigin", "anonymous")
+                )
             },
-            new H2 { "Examples" },
-            new P
+            new Body
             {
-                // You also directly pass strings in the collection initializer as content, these will be encoded by default.
-                "This <br> tag will be encoded and displayed in the page.",
-            },
-            new P
-            {
-                // You can also embed raw HTML content from another source
-                new Raw("This text will contain an actual <br> line break in the HTML output.")
-            },
-            new P
-            {
-                // The are some shortcuts (Id, Class, Href, Required, etc.) in the CommonAttributes class
-                // that make passing attributes somewhat simpler and readable
-                "This library is available on ", new A(Href("https://github.com/harro-dot-net/HtmlBuilder")){ "Github" },
+                new H1 { "Text example" },
+                new P
+                {
+                    // You directly pass strings in the collection initializer as content, these will be encoded by default.
+                    "The <br> tag in this line will be encoded and show up in the html page."
+                },
+                new P
+                {
+                    // You can embed raw HTML content from a string.
+                    new Raw("This text will contain an actual <br> line break in the HTML output."),
+                },
+                new H1 { "List example" },
+                new Ul(Class("list-group"))
+                {
+                    // You can pass a collection of elements as an item in the collection initializer.
+                    // This makes it simple to add projections of data inline.
+                    Enumerable.Range(1, 10).Select(number =>
+                        new Li(Class("list-item"))
+                        {
+                            // Each element is rendered in sequence, so no intermediate
+                            // string interpolation or concatenation is needed.
+                            number.ToString(), " squared equals ", (number * number).ToString()
+                        }
+                    )
+                },
+                new H1 { "Table example" },
+                new Table(Class("table"))
+                {
+                    new Thead
+                    {
+                        new Tr
+                        {
+                            new Th { "number" },
+                            new Th { "squared" },
+                        },
+                    },
+                    new Tbody
+                    {
+                        Enumerable.Range(1, 10).Select(number =>
+                            new Tr
+                            {
+                                new Td { number.ToString() },
+                                new Td { (number * number).ToString()},
+                            }
+                        )
+                    },
+                },
+                new H1 { "Link example" },
+                new P
+                {
+                    "Visit the project page on ", new A(Href("https://github.com/harro-dot-net/HtmlBuilder")){ "GitHub" }
+                },
             }
-        }
-    };
+        };
 
-var htmlString = new Document(html).Render();
+    // Wrapping the HTML element in a document will add a HTML5 DOCTYPE declaration.
+    // The Render method will convert the nested structure to a string.
+    return Results.Text(new Document(html).Render(), "text/html");
+});
+
+app.Run();
 ```
 This will generate the following output:  
 (note: the actual output is not formatted with the extra whitespace and indentation)
 ```html
-<!doctype html>
+<!DOCTYPE html>
 <html dir="ltr" lang="en">
-<head>
-    <title>Example Page</title>
-</head>
-<body>
-    <h1>HTML builder</h1>
-    <h2>Desing goals </h2>
-    <p>This library has the following design goals:
-    <ul>
-        <li>You should be able to create HTML by writing pure C# code; no templating, no engines, no magic strings.</li>
-        <li>It should be easy to hand-write nested HTML structures in code.</li>
-        <li>It should be easy to generate HTML structures by code.</li>
-        <li>It should be easy to combine hand-written and generated HTML structures.</li>
-        <li>The code should contain as little syntactic clutter as possible.</li>
-        <li>The code should be easy to read and resemble the HTML it generates, making it obvious what the HTML output will be just by looking at the code.</li>
-        <li>The library should be small, simple, efficient and extensible; rather than solving every possible use case.</li>
-        <li>No external dependencies.</li>
-    </ul>
-    </p>
-    <h2>Examples</h2>
-    <p>This &lt;br&gt; tag will be encoded and displayed in the page.</p>
-    <p>This text will contain an actual <br> line break in the HTML output.</p>
-    <p>This library is available on <a href="https://github.com/harro-dot-net/HtmlBuilder">Github</a></p>
-</body>
+    <head>
+        <title>Getting started</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <h1>Text example</h1>
+        <p>The &lt;br &gt;tag in this line will be encoded and show up in the html page.</p>
+        <p>
+            This text will contain an actual <br>line break in the HTML output.
+        </p>
+        <h1>List example</h1>
+        <ul class="list-group">
+            <li class="list-item">1 squared equals 1</li>
+            <li class="list-item">2 squared equals 4</li>
+            <li class="list-item">3 squared equals 9</li>
+            <li class="list-item">4 squared equals 16</li>
+            <li class="list-item">5 squared equals 25</li>
+            <li class="list-item">6 squared equals 36</li>
+            <li class="list-item">7 squared equals 49</li>
+            <li class="list-item">8 squared equals 64</li>
+            <li class="list-item">9 squared equals 81</li>
+            <li class="list-item">10 squared equals 100</li>
+        </ul>
+        <h1>Table example</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>number</th>
+                    <th>squared</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>4</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>9</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>16</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>25</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>36</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>49</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>64</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>81</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>100</td>
+                </tr>
+            </tbody>
+        </table>
+        <h1>Link example</h1>
+        <p>
+            Visit the project page on <a href="https://github.com/harro-dot-net/HtmlBuilder">GitHub</a>
+        </p>
+    </body>
 </html>
 ```
 
