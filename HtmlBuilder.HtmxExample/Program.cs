@@ -45,7 +45,7 @@ IResult GetMainPage(HttpContext context, [FromServices] IAntiforgery antiforgery
 
 static IRenderer CreateHtmxBootstrapPage(string title, Body body)
 {
-    var html = new Html(("dir", "ltr"), ("lang", "en"))
+    var html = new Html(Dir("ltr"), Lang("en"))
     {
         new Head
         {
@@ -53,18 +53,18 @@ static IRenderer CreateHtmxBootstrapPage(string title, Body body)
             new Meta(("charset","utf-8")),
             new Meta(("name","viewport"),("content","width=device-width, initial-scale=1")),
             new Link(
-                ("href","https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"),
-                ("rel","stylesheet"),
+                Href("https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"),
+                Rel("stylesheet"),
                 ("integrity","sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"),
                 ("crossorigin", "anonymous")
             ),
             new Script(
-                ("src","https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"),
+                Src("https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"),
                 ("integrity","sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"),
                 ("crossorigin","anonymous")
             ),
             new Script(
-                ("src","https://unpkg.com/htmx.org@2.0.4/dist/htmx.js"),
+                Src("https://unpkg.com/htmx.org@2.0.4/dist/htmx.js"),
                 ("integrity","sha384-oeUn82QNXPuVkGCkcrInrS1twIxKhkZiFfr2TdiuObZ3n3yIeMiqcRzkIcguaof1"),
                 ("crossorigin","anonymous")
             ),

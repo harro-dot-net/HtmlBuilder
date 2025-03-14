@@ -29,7 +29,10 @@ public static class CommonAttributes
 
     public static HtmlAttribute Id(string value) => ("id", value);
     public static HtmlAttribute Class(string value) => ("class", value);
+    public static HtmlAttribute Dir(string value) => ("dir", value);
     public static HtmlAttribute Style(string value) => ("style", value);
+    public static HtmlAttribute Content(string value) => ("content", value);
+    public static HtmlAttribute Charset(string value) => ("charset", value);
     public static HtmlAttribute Src(string value) => ("src", value);
     public static HtmlAttribute Href(string value) => ("href", value);
     public static HtmlAttribute Alt(string value) => ("alt", value);
