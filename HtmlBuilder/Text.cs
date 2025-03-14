@@ -3,10 +3,10 @@ using System.Text.Unicode;
 
 namespace HtmlBuilder;
 
-public sealed class Text(string Text) : IContentRenderer
+public sealed class Text(string text) : IContentRenderer
 {
     private static readonly HtmlEncoder _encoder = HtmlEncoder.Create(allowedRanges: UnicodeRanges.BasicLatin);
-    private readonly Lazy<string> _encodedString = new(() => _encoder.Encode(Text), true);
+    private readonly Lazy<string> _encodedString = new(() => _encoder.Encode(text), true);
 
     public void Render(Action<string> append)
     {

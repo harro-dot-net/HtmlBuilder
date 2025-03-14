@@ -1,9 +1,9 @@
 ﻿namespace HtmlBuilder;
 
-public class Raw(string Text) : IContentRenderer
+public class Raw(string text) : IContentRenderer
 {
     public void Render(Action<string> append)
     {
-        append(Text);
+        append(text);
     }
 }
