@@ -2,19 +2,21 @@ using HtmlBuilder;
 using static HtmlBuilder.CommonAttributes;
 
 var builder = WebApplication.CreateBuilder(args);
-
 var app = builder.Build();
-
 app.UseHttpsRedirection();
 
 app.MapGet("/", () =>
 {
     var html =
-        // Attributes a passed to the constructor as tuples with 2 strings, a key and a value (which may be empty).
-        // For many common attributes (like id, class etc.) there is a convenience factory method, which makes it easier to type and read.
-        new Html(("dir", "ltr"), Lang("en"))
+        // Attributes are passed to the constructor as tuples with 2 strings, a key and a value.
+        // (An empty value is not rendered to the output).
+        // For many common attributes (like 'id', 'class' etc.) there are factory methods which makes it easier to type and read.
+        new Html(Dir("ltr"), Lang("en"))
         {
             // Nested elements or selfclosing can be added through collection initializers.
+            // This makes it easy to write nested structures.
+            // This way reading and writing a HTML document is very similar to
+            // reading and writing plain HTML.
             new Head
             {
                 new Title { "Getting started" },
@@ -34,7 +36,7 @@ app.MapGet("/", () =>
             },
             new Body
             {
-                new H1{ "Text example" },
+                new H1 { "Text example" },
                 new P
                 {
                     // You directly pass strings in the collection initializer as content, these will be encoded by default.
@@ -49,7 +51,7 @@ app.MapGet("/", () =>
                 new Ul(Class("list-group"))
                 {
                     // You can pass a collection of elements as an item in the collection initializer.
-                    // This makes it simple to add projections of data.
+                    // This makes it simple to add projections of data inline.
                     Enumerable.Range(1, 10).Select(number =>
                         new Li(Class("list-item"))
                         {
@@ -89,10 +91,9 @@ app.MapGet("/", () =>
             }
         };
 
-    // Wrapping the HTML element in a document will add a HTML5 DocType declaration.
+    // Wrapping the HTML element in a document will add a HTML5 DOCTYPE declaration.
     // The Render method will convert the nested structure to a string.
     return Results.Text(new Document(html).Render(), "text/html");
 });
 
 app.Run();
-
