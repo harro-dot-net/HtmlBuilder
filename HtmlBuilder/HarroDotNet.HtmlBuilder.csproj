@@ -3,5 +3,19 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<PackageId>HarroDotNet.HtmlBuilder</PackageId>
+	<Version>25.03.20</Version>
+	<Authors>Harro Lock</Authors>
+	<Discription>A dependency free, simple and lightweight library to build HHTML in C#</Discription>
+	<PackageTags>C#;.Net;Html;Builder;Generator</PackageTags>
+	<RepositoryUrl>https://github.com/harro-dot-net/HtmlBuilder</RepositoryUrl>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+	<ItemGroup>
+		<None Include="..\README.md">
+			<Pack>true</Pack>
+			<PackagePath>README.md</PackagePath>
+		</None>
+	</ItemGroup>
 </Project>
