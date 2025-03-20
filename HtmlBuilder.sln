@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlBuilder", "HtmlBuilder\HtmlBuilder.csproj", "{982209F5-2235-4CBF-826E-F72C555C3C38}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HarroDotNet.HtmlBuilder", "HtmlBuilder\HarroDotNet.HtmlBuilder.csproj", "{982209F5-2235-4CBF-826E-F72C555C3C38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlBuilder.Examples", "HtmlBuilder.Examples\HtmlBuilder.Examples.csproj", "{F195973A-5976-4F3D-B325-0A49FF57D2FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HarroDotNet.HtmlBuilder.Examples", "HtmlBuilder.Examples\HarroDotNet.HtmlBuilder.Examples.csproj", "{F195973A-5976-4F3D-B325-0A49FF57D2FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlBuilder.HtmxExample", "HtmlBuilder.HtmxExample\HtmlBuilder.HtmxExample.csproj", "{56AE5482-B316-42C6-9DF3-9C531F219FE5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HarroDotNet.HtmlBuilder.HtmxExample", "HtmlBuilder.HtmxExample\HarroDotNet.HtmlBuilder.HtmxExample.csproj", "{56AE5482-B316-42C6-9DF3-9C531F219FE5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

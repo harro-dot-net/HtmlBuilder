@@ -1,7 +1,7 @@
 ﻿using System.Text.Encodings.Web;
 using System.Text.Unicode;
 
-namespace HtmlBuilder;
+namespace HarroDotNet.HtmlBuilder;
 
 public sealed class Text(string text) : IContentRenderer
 {

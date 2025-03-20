@@ -1,4 +1,4 @@
-﻿namespace HtmlBuilder;
+﻿namespace HarroDotNet.HtmlBuilder;
 
 public interface IAttributeRenderer : IRenderer
 {

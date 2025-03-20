@@ -1,4 +1,4 @@
-﻿namespace HtmlBuilder;
+﻿namespace HarroDotNet.HtmlBuilder;
 
 public class SelfClosingTag : IContentRenderer
 {

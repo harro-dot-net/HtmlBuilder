@@ -1,8 +1,9 @@
-using HtmlBuilder;
-using HtmlBuilder.HtmxExample;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
-using static HtmlBuilder.CommonAttributes;
+using HarroDotNet.HtmlBuilder;
+using HtmlBuilder.HtmxExample;
+using HarroDotNet.HtmlBuilder.HtmxExample;
+using static HarroDotNet.HtmlBuilder.CommonAttributes;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAntiforgery();

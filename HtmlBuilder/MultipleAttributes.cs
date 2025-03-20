@@ -1,4 +1,4 @@
-﻿namespace HtmlBuilder;
+﻿namespace HarroDotNet.HtmlBuilder;
 
 internal sealed class MultipleAttributes : IAttributeBuilder
 {

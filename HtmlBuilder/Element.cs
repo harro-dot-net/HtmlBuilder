@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace HtmlBuilder;
+namespace HarroDotNet.HtmlBuilder;
 
 public class Element : IEnumerable, IContentBuilder
 {
@@ -47,7 +47,7 @@ public class Element : IEnumerable, IContentBuilder
 
     public Element AddAttributes(params IEnumerable<HtmlAttribute> attributes)
     {
-        foreach(var attribute in attributes)
+        foreach (var attribute in attributes)
         {
             _attributes = _attributes.AddAttribute(attribute);
         }

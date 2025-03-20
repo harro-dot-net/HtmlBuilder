@@ -1,4 +1,4 @@
-﻿namespace HtmlBuilder.HtmxExample;
+﻿namespace HarroDotNet.HtmlBuilder.HtmxExample;
 
 public static class Extensions
 {
