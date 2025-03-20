@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
-using HarroDotNet.HtmlBuilder;
-using HarroDotNet.HtmlBuilder.HtmxExample;
 using static HarroDotNet.HtmlBuilder.CommonAttributes;
 
-namespace HtmlBuilder.HtmxExample;
+namespace HarroDotNet.HtmlBuilder.HtmxExample;
 
 public sealed class ScoreBoard
 {
