@@ -21,8 +21,8 @@ This library provides a simple, easy-to-read and easy-to-write way of generating
 
 ## Example code
 ```csharp
-using HtmlBuilder;
-using static HtmlBuilder.CommonAttributes;
+using HarroDotNet.HtmlBuilder;
+using static HarroDotNet.HtmlBuilder.CommonAttributes;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
