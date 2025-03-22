@@ -12,6 +12,7 @@
 	<RepositoryUrl>https://github.com/harro-dot-net/HtmlBuilder</RepositoryUrl>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<PackageProjectUrl>https://github.com/harro-dot-net/HtmlBuilder</PackageProjectUrl>
   </PropertyGroup>
 	<ItemGroup>
 		<None Include="..\README.md">
