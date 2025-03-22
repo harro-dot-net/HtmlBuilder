@@ -7,7 +7,7 @@
 	<PackageId>HarroDotNet.HtmlBuilder</PackageId>
 	<Version>25.03.23</Version>
 	<Authors>Harro Lock</Authors>
-	<Discription>A dependency free, simple and lightweight library to build HHTML in C#</Discription>
+	<Discription>A simple and lightweight library to build HTML in C#</Discription>
 	<PackageTags>C#;.Net;Html;Builder;Generator</PackageTags>
 	<RepositoryUrl>https://github.com/harro-dot-net/HtmlBuilder</RepositoryUrl>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>

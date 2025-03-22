@@ -10,14 +10,13 @@ This library provides a simple, easy-to-read and easy-to-write way of generating
 
 ## Philosophy / Design Goals
 
-- You should be able to create HTML by writing pure C# code — no templating, no engines, no magic strings.
+- You should be able to create HTML by writing pure C# code.
 - It should be easy to hand-write nested HTML structures in code.
 - It should be easy to generate HTML structures by code.
 - It should be easy to combine hand-written and generated HTML structures.
 - The code should contain as little syntactic clutter as possible.
 - The code should be easy to read and resemble the HTML it generates, making it obvious what the HTML output will be just by looking at the code.
 - The library should be small, simple, efficient and extensible — rather than solving every possible use case.
-- No external dependencies.
 
 ## Example code
 ```csharp
