@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
+	<LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<PackageId>HarroDotNet.HtmlBuilder</PackageId>
@@ -17,5 +18,8 @@
 			<Pack>true</Pack>
 			<PackagePath>README.md</PackagePath>
 		</None>
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="System.Text.Encodings.Web" Version="9.0.3" />
 	</ItemGroup>
 </Project>
