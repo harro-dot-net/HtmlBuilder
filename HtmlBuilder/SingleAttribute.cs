@@ -1,6 +1,6 @@
 ﻿namespace HarroDotNet.HtmlBuilder;
 
-internal sealed class SingleAttribute((string Key, string Value) attribute) : IAttributeBuilder
+internal sealed class SingleAttribute(HtmlAttribute attribute) : IAttributeBuilder
 {
     public IAttributeBuilder AddAttribute(HtmlAttribute otherAttribute) =>
         new MultipleAttributes()

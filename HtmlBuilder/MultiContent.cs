@@ -13,6 +13,8 @@ internal sealed class MultiContent : IContentBuilder
     public void Render(Action<string> append)
     {
         foreach (var content in _content)
+        {
             content.Render(append);
+        }
     }
 }
