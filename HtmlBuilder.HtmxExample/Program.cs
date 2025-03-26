@@ -23,7 +23,7 @@ IResult GetMainPage(HttpContext context, [FromServices] IAntiforgery antiforgery
     {
         new H1(Class("text-center"))
         {
-            "ScoreBoard"
+            "Score board"
         },
         new Div
         {
@@ -35,7 +35,7 @@ IResult GetMainPage(HttpContext context, [FromServices] IAntiforgery antiforgery
         },
     };
 
-    var htmlDocument = CreateHtmxBootstrapPage(
+    var htmlDocument = CreateMainPage(
         title: "ScoreBoard",
         body: body
     );
@@ -43,15 +43,15 @@ IResult GetMainPage(HttpContext context, [FromServices] IAntiforgery antiforgery
     return htmlDocument.ToHtmlResult();
 }
 
-static IRenderer CreateHtmxBootstrapPage(string title, Body body)
+static IRenderer CreateMainPage(string title, Body body)
 {
     var html = new Html(Dir("ltr"), Lang("en"))
     {
         new Head
         {
             new Title { title },
-            new Meta(("charset","utf-8")),
-            new Meta(("name","viewport"),("content","width=device-width, initial-scale=1")),
+            new Meta(Charset("utf-8")),
+            new Meta(Name("viewport"), Content("width=device-width, initial-scale=1")),
             new Link(
                 Href("https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"),
                 Rel("stylesheet"),

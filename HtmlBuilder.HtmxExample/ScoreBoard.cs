@@ -73,14 +73,38 @@ public sealed class ScoreBoard
     }
 
     internal IContentRenderer GetScoreForm(HttpContext context, IAntiforgery antiforgery) =>
-        new Form(("hx-post", "/scores"), ("hx-target", $"#{ScoreList}"), ("hx-swap", "outerHTML"))
+        new Form(("hx-post", ScoresEndpoint), ("hx-target", $"#{ScoreList}"), ("hx-swap", "outerHTML"))
         {
-            new Input(TypeText, Id("new-name"), Name("Name"), Required, Class("form-control"), Placeholder("Enter name...")),
-            new Input(TypeNumber, Id("new-score"), Name("Score"), Required, Class("form-control"), Placeholder("Enter score...")),
-            new Button(Class("btn btn-primary ms-2"), ("hx-post", ScoresEndpoint), ("hx-trigger","click"), ("hx-target", $"#{ScoreList}"))
+            new Input(
+                TypeText,
+                Required,
+                Id("new-name"),
+                Name("Name"),
+                Class("form-control"),
+                Placeholder("Enter name...")
+            ),
+            new Input(
+                TypeNumber,
+                Required,
+                Id("new-score"),
+                Name("Score"),
+                Class("form-control"),
+                Placeholder("Enter score...")
+            ),
+            new Button(
+                Class("btn btn-primary ms-2"),
+                ("hx-post", ScoresEndpoint),
+                ("hx-trigger","click"),
+                ("hx-target", $"#{ScoreList}"),
+                ("hx-swap", "outerHTML")
+            )
             {
                 "Add Score"
             },
-            new Input(TypeHidden, Name("__RequestVerificationToken"), Value(antiforgery.GetAndStoreTokens(context).RequestToken!)),
+            new Input(
+                TypeHidden,
+                Name("__RequestVerificationToken"),
+                Value(antiforgery.GetAndStoreTokens(context).RequestToken!)
+            )
         };
 }
