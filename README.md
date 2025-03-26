@@ -19,7 +19,7 @@ This library provides a simple, easy-to-read and easy-to-write way of generating
 - The library should be small, simple, efficient and extensible — rather than solving every possible use case.
 
 ## Example code
-This expample code is an example implemented in a minimal API .Net core project, serving a HTML page completely constructed using HtmlBuilder
+This expample code is an example implemented in a minimal API .Net core project, serving a HTML page completely constructed using HtmlBuilder.
 ```csharp
 using HarroDotNet.HtmlBuilder;
 using static HarroDotNet.HtmlBuilder.CommonAttributes;
