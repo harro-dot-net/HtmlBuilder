@@ -19,14 +19,13 @@ This library provides a simple, easy-to-read and easy-to-write way of generating
 - The library should be small, simple, efficient and extensible — rather than solving every possible use case.
 
 ## Example code
-This expample code is an example implemented in a minimal API .Net core project, serving a HTML page completely constructed using HtmlBuilder.
+This example code is an example implemented in a minimal API .Net core project, serving a HTML page completely constructed using HtmlBuilder.
 ```csharp
 using HarroDotNet.HtmlBuilder;
 using static HarroDotNet.HtmlBuilder.CommonAttributes;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
-app.UseHttpsRedirection();
 
 app.MapGet("/", () =>
 {
@@ -36,7 +35,7 @@ app.MapGet("/", () =>
         // For many common attributes (like 'id', 'class' etc.) there are factory methods which makes it easier to type and read.
         new Html(Dir("ltr"), Lang("en"))
         {
-            // Nested elements or selfclosing can be added through collection initializers.
+            // Nested elements or self closing tags can be added through collection initializers.
             // This makes it easy to write nested structures.
             // This way reading and writing a HTML document is very similar to
             // reading and writing plain HTML.

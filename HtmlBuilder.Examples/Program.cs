@@ -12,7 +12,7 @@ app.MapGet("/", () =>
         // For many common attributes (like 'id', 'class' etc.) there are factory methods which makes it easier to type and read.
         new Html(Dir("ltr"), Lang("en"))
         {
-            // Nested elements or self closing can be added through collection initializers.
+            // Nested elements or self closing tags can be added through collection initializers.
             // This makes it easy to write nested structures.
             // This way reading and writing a HTML document is very similar to
             // reading and writing plain HTML.
