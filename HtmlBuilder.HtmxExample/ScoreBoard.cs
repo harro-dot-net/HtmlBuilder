@@ -44,18 +44,15 @@ public sealed class ScoreBoard
 
     internal IContentRenderer GetScoreTable()
     {
-        var scope_col = ("scope", "col");
-        var scope_row = ("scope", "row");
-
         return new Table(Id(ScoreList), Class("table"))
         {
             new Thead
             {
                 new Tr
                 {
-                    new Th (scope_col) { "Rank" },
-                    new Th (scope_col) { "Name" },
-                    new Th (scope_col) { "Score" },
+                    new Th { new Raw("Rank") },
+                    new Th { new Raw("Name") },
+                    new Th { new Raw("Score") },
                 }
             },
             new Tbody
@@ -63,9 +60,9 @@ public sealed class ScoreBoard
                 _highScores.Select((score, index) =>
                     new Tr
                     {
-                        new Th(scope_row) { $"#{index + 1}" },
+                        new Th { new Raw($"#{index + 1}") },
                         new Td { score.Name },
-                        new Td { score.Score.ToString() },
+                        new Td { new Raw(score.Score.ToString()) },
                     }
                 )
             }
@@ -75,31 +72,41 @@ public sealed class ScoreBoard
     internal IContentRenderer GetScoreForm(HttpContext context, IAntiforgery antiforgery) =>
         new Form(("hx-post", ScoresEndpoint), ("hx-target", $"#{ScoreList}"), ("hx-swap", "outerHTML"))
         {
-            new Input(
-                TypeText,
-                Required,
-                Id("new-name"),
-                Name("Name"),
-                Class("form-control"),
-                Placeholder("Enter name...")
-            ),
-            new Input(
-                TypeNumber,
-                Required,
-                Id("new-score"),
-                Name("Score"),
-                Class("form-control"),
-                Placeholder("Enter score...")
-            ),
-            new Button(
-                Class("btn btn-primary ms-2"),
-                ("hx-post", ScoresEndpoint),
-                ("hx-trigger","click"),
-                ("hx-target", $"#{ScoreList}"),
-                ("hx-swap", "outerHTML")
-            )
+            new Div
             {
-                "Add Score"
+                new Input(
+                    TypeText,
+                    Required,
+                    Id("new-name"),
+                    Name("Name"),
+                    Class("form-control"),
+                    Placeholder("Enter name...")
+                ),
+            },
+            new Div
+            {
+                new Input(
+                    TypeNumber,
+                    Required,
+                    Id("new-score"),
+                    Name("Score"),
+                    Class("form-control"),
+                    Placeholder("Enter score...")
+                ),
+            },
+            new Div
+            {
+                new Button(
+                    TypeButton,
+                    Class("btn btn-primary ms-2"),
+                    ("hx-post", ScoresEndpoint),
+                    ("hx-trigger","click"),
+                    ("hx-target", $"#{ScoreList}"),
+                    ("hx-swap", "outerHTML")
+                )
+                {
+                    "Add Score"
+                },
             },
             new Input(
                 TypeHidden,

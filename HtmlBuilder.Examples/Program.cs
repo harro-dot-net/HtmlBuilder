@@ -21,17 +21,7 @@ app.MapGet("/", () =>
                 new Title { "Getting started" },
                 new Meta(Charset("utf-8")),
                 new Meta(Name("viewport"), Content("width=device-width, initial-scale=1")),
-                new Link(
-                    Href("https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"),
-                    Rel("stylesheet"),
-                    ("integrity","sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"),
-                    ("crossorigin", "anonymous")
-                ),
-                new Script(
-                    Src("https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"),
-                    ("integrity","sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"),
-                    ("crossorigin", "anonymous")
-                )
+                new Link(Href("https://cdn.simplecss.org/simple.min.css"), RelStylesheet),
             },
             new Body
             {
@@ -47,12 +37,12 @@ app.MapGet("/", () =>
                     new Raw("This text will contain an actual <br> line break in the HTML output."),
                 },
                 new H1 { "List example" },
-                new Ul(Class("list-group"))
+                new Ul
                 {
                     // You can pass a collection of elements as an item in the collection initializer.
                     // This makes it simple to add projections of data inline.
                     Enumerable.Range(1, 10).Select(number =>
-                        new Li(Class("list-item"))
+                        new Li
                         {
                             // Each element is rendered in sequence, so no intermediate
                             // string interpolation or concatenation is needed.
@@ -61,7 +51,7 @@ app.MapGet("/", () =>
                     )
                 },
                 new H1 { "Table example" },
-                new Table(Class("table"))
+                new Table
                 {
                     new Thead
                     {
@@ -76,7 +66,7 @@ app.MapGet("/", () =>
                         Enumerable.Range(1, 10).Select(number =>
                             new Tr
                             {
-                                new Td { number.ToString() },
+                                new Th { number.ToString() },
                                 new Td { (number * number).ToString()},
                             }
                         )
