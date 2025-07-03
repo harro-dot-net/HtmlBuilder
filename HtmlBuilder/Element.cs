@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Numerics;
 
 namespace HarroDotNet.HtmlBuilder;
 
@@ -59,6 +60,16 @@ public class Element : IEnumerable, IContentBuilder
     public void Add(string text)
     {
         _content = _content.AddContent(new Text(text));
+    }
+
+    public void Add(int value)
+    {
+        _content = _content.AddContent(new LongContent(value));
+    }
+
+    public void Add(long value)
+    {
+        _content = _content.AddContent(new LongContent(value));
     }
 
     public void Add(IContentRenderer content)

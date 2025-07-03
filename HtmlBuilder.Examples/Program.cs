@@ -1,3 +1,4 @@
+using System.Text;
 using HarroDotNet.HtmlBuilder;
 using static HarroDotNet.HtmlBuilder.CommonAttributes;
 
@@ -25,18 +26,22 @@ app.MapGet("/", () =>
             },
             new Body
             {
-                new H1 { "Text example" },
+                new H1 { (Raw)"Text example" },
                 new P
                 {
                     // You directly pass strings in the collection initializer as content, these will be encoded by default.
-                    "The <br> tag in this line will be encoded and show up in the html page."
-                },
-                new P
-                {
+                    "The <br> tag in this line will be encoded and show up in the html page.",
+
                     // You can embed raw HTML content from a string.
-                    new Raw("This text will contain an actual <br> line break in the HTML output."),
+                    (Raw)
+                    """
+                    <br><br>
+                    This text will contain<br>
+                    actual line breaks<br>
+                    in the HTML output.<br>
+                    """,
                 },
-                new H1 { "List example" },
+                new H1 { (Raw)"List example" },
                 new Ul
                 {
                     // You can pass a collection of elements as an item in the collection initializer.
@@ -44,21 +49,25 @@ app.MapGet("/", () =>
                     Enumerable.Range(1, 10).Select(number =>
                         new Li
                         {
-                            // Each element is rendered in sequence, so no intermediate
-                            // string interpolation or concatenation is needed.
-                            number.ToString(), " squared equals ", (number * number).ToString()
+                            // You canpass int and long values directly in the collection initializer.
+                            // These are rendered without intermediate string allocations.
+                            // Each value is rendered in sequence, so no intermediate
+                            // string interpolation, concatenation or conversion is needed.
+                            number,
+                            (Raw)" squared equals ",
+                            number * number
                         }
                     )
                 },
-                new H1 { "Table example" },
+                new H1 { (Raw)"Table example" },
                 new Table
                 {
                     new Thead
                     {
                         new Tr
                         {
-                            new Th { "number" },
-                            new Th { "squared" },
+                            new Th { (Raw)"number" },
+                            new Th { (Raw)"squared" },
                         },
                     },
                     new Tbody
@@ -66,23 +75,23 @@ app.MapGet("/", () =>
                         Enumerable.Range(1, 10).Select(number =>
                             new Tr
                             {
-                                new Th { number.ToString() },
-                                new Td { (number * number).ToString()},
+                                new Th { number },
+                                new Td { number * number },
                             }
                         )
                     },
                 },
-                new H1 { "Link example" },
+                new H1 { (Raw) "Link example" },
                 new P
                 {
-                    "Visit the project page on ", new A(Href("https://github.com/harro-dot-net/HtmlBuilder")){ "GitHub" }
+                    (Raw)"Visit the project page on ", new A(Href("https://github.com/harro-dot-net/HtmlBuilder")){ (Raw)"GitHub" }
                 },
             }
         };
 
     // Wrapping the HTML element in a document will add a HTML5 DOCTYPE declaration.
     // The Render method will convert the nested structure to a string.
-    return Results.Text(new Document(html).Render(), "text/html");
+    return Results.Text(new Document(html).Render(), "text/html", Encoding.UTF8);
 });
 
 app.Run();

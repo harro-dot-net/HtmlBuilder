@@ -4,14 +4,31 @@ using static HarroDotNet.HtmlBuilder.CommonAttributes;
 
 namespace HarroDotNet.HtmlBuilder.HtmxExample;
 
+public class RawString(string Content) : IContentRenderer
+{
+    public void Render(Action<string> append)
+    {
+        append(Content);
+    }
+
+    public static implicit operator RawString(string s) => new(s);
+    public static RawString operator -(RawString left) => left;
+}
+
 public sealed class ScoreBoard
 {
     private const string ScoresEndpoint = "/scores";
     private const string ScoreList = "score-list";
 
-    internal sealed record HighScore(string Name, int Score);
+    internal void MapEndpoints(WebApplication app)
+    {
+        app.MapGet(ScoresEndpoint, GetScoreTable);
+        app.MapPost(ScoresEndpoint, PostScore);
+    }
 
-    private IEnumerable<HighScore> _highScores = [
+    internal sealed record HighScore(string Name, int Points);
+
+    private HighScore[] _highScores = [
         new ("Mario", 10000),
         new ("Luigi", 9000),
         new ("Yoshi ", 8000),
@@ -24,35 +41,28 @@ public sealed class ScoreBoard
         new ("Princess Peach", 1000),
     ];
 
-    internal void MapEndpoints(WebApplication app)
-    {
-        app.MapPost(ScoresEndpoint, PostScore);
-        app.MapGet(ScoresEndpoint, GetScoreTable);
-    }
-
     internal IResult PostScore([FromForm] HighScore highScore)
     {
         _highScores =
             _highScores
-            .Append(highScore)
-            .OrderByDescending(h => h.Score)
-            .Take(10)
-            .ToArray();
+                .Append(highScore)
+                .OrderByDescending(h => h.Points)
+                .Take(10)
+                .ToArray();
 
         return GetScoreTable().ToHtmlResult();
     }
 
-    internal IContentRenderer GetScoreTable()
-    {
-        return new Table(Id(ScoreList), Class("table"))
+    internal IContentRenderer GetScoreTable() =>
+        new Table(Id(ScoreList))
         {
             new Thead
             {
                 new Tr
                 {
-                    new Th { new Raw("Rank") },
-                    new Th { new Raw("Name") },
-                    new Th { new Raw("Score") },
+                    new Th { (Raw)"Rank" },
+                    new Th { (Raw)"Name" },
+                    new Th { (Raw)"Score" },
                 }
             },
             new Tbody
@@ -60,17 +70,16 @@ public sealed class ScoreBoard
                 _highScores.Select((score, index) =>
                     new Tr
                     {
-                        new Th { new Raw($"#{index + 1}") },
+                        new Th { (Raw)"#", index + 1 },
                         new Td { score.Name },
-                        new Td { new Raw(score.Score.ToString()) },
+                        new Td { score.Points },
                     }
                 )
             }
         };
-    }
 
-    internal IContentRenderer GetScoreForm(HttpContext context, IAntiforgery antiforgery) =>
-        new Form(("hx-post", ScoresEndpoint), ("hx-target", $"#{ScoreList}"), ("hx-swap", "outerHTML"))
+    internal static IContentRenderer CreateScoreForm(HttpContext context, IAntiforgery antiforgery) =>
+        new Form
         {
             new Div
             {
@@ -79,7 +88,6 @@ public sealed class ScoreBoard
                     Required,
                     Id("new-name"),
                     Name("Name"),
-                    Class("form-control"),
                     Placeholder("Enter name...")
                 ),
             },
@@ -89,8 +97,7 @@ public sealed class ScoreBoard
                     TypeNumber,
                     Required,
                     Id("new-score"),
-                    Name("Score"),
-                    Class("form-control"),
+                    Name("Points"),
                     Placeholder("Enter score...")
                 ),
             },
@@ -98,14 +105,13 @@ public sealed class ScoreBoard
             {
                 new Button(
                     TypeButton,
-                    Class("btn btn-primary ms-2"),
                     ("hx-post", ScoresEndpoint),
                     ("hx-trigger","click"),
                     ("hx-target", $"#{ScoreList}"),
                     ("hx-swap", "outerHTML")
                 )
                 {
-                    "Add Score"
+                    (Raw)"Add Score"
                 },
             },
             new Input(

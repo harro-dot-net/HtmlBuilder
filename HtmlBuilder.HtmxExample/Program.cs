@@ -13,43 +13,26 @@ app.UseAntiforgery();
 
 ScoreBoard scoreBoard = new();
 
-app.MapGet("/", GetMainPage);
+app.MapGet("/", Home);
 scoreBoard.MapEndpoints(app);
 app.Run();
 
-IResult GetMainPage(HttpContext context, [FromServices] IAntiforgery antiforgery)
+IResult Home(HttpContext context, [FromServices] IAntiforgery antiforgery)
 {
-    var body = new Body
-    {
-        new H1
-        {
-            "Score board"
-        },
-        new Div
-        {
-            scoreBoard.GetScoreTable(),
-        },
-        new Div
-        {
-            scoreBoard.GetScoreForm(context, antiforgery),
-        },
-    };
-
-    var htmlDocument = CreateMainPage(
-        title: "ScoreBoard",
-        body: body
+    var html = CreateHtml(
+        title: "HTMX example",
+        body: CreateBody(context, antiforgery)
     );
 
-    return htmlDocument.ToHtmlResult();
+    return new Document(html).ToHtmlResult();
 }
 
-static IRenderer CreateMainPage(string title, Body body)
-{
-    var html = new Html(Dir("ltr"), Lang("en"))
+Html CreateHtml(string title, Body body) =>
+    new (Dir("ltr"), Lang("en"))
     {
         new Head
         {
-            new Title { title },
+            new Title { new Raw(title) },
             new Meta(Charset("utf-8")),
             new Meta(Name("viewport"), Content("width=device-width, initial-scale=1")),
             new Link(Href("https://cdn.simplecss.org/simple.min.css"), RelStylesheet),
@@ -58,5 +41,19 @@ static IRenderer CreateMainPage(string title, Body body)
         body
     };
 
-    return new Document(html);
-}
+
+Body CreateBody(HttpContext context, IAntiforgery antiforgery) =>
+    [
+        new H1
+        {
+            (Raw)"Score board"
+        },
+        new Div
+        {
+            scoreBoard.GetScoreTable(),
+        },
+        new Div
+        {
+            ScoreBoard.CreateScoreForm(context, antiforgery),
+        },
+    ];
