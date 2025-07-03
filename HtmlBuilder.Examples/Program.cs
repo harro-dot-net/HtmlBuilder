@@ -53,9 +53,7 @@ app.MapGet("/", () =>
                             // These are rendered without intermediate string allocations.
                             // Each value is rendered in sequence, so no intermediate
                             // string interpolation, concatenation or conversion is needed.
-                            number,
-                            (Raw)" squared equals ",
-                            number * number
+                            number, (Raw)" squared equals ", number * number
                         }
                     )
                 },
@@ -81,7 +79,7 @@ app.MapGet("/", () =>
                         )
                     },
                 },
-                new H1 { (Raw) "Link example" },
+                new H1 { (Raw)"Link example" },
                 new P
                 {
                     (Raw)"Visit the project page on ", new A(Href("https://github.com/harro-dot-net/HtmlBuilder")){ (Raw)"GitHub" }
