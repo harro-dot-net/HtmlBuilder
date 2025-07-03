@@ -14,9 +14,8 @@ app.MapGet("/", () =>
         new Html(Dir("ltr"), Lang("en"))
         {
             // Nested elements or self closing tags can be added through collection initializers.
-            // This makes it easy to write nested structures.
-            // This way reading and writing a HTML document is very similar to
-            // reading and writing plain HTML.
+            // This makes it easy to write nested structures. This way reading and writing a
+            // HTML document is very similar to  reading and writing plain HTML.
             new Head
             {
                 new Title { "Getting started" },
@@ -29,7 +28,8 @@ app.MapGet("/", () =>
                 new H1 { (Raw)"Text example" },
                 new P
                 {
-                    // You directly pass strings in the collection initializer as content, these will be encoded by default.
+                    // You directly pass strings in the collection initializer as content,
+                    // these will be encoded by default.
                     "The <br> tag in this line will be encoded and show up in the html page.",
 
                     // You can embed raw HTML content from a string.

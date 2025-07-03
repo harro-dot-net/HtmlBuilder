@@ -19,8 +19,9 @@ This library provides a simple, easy-to-read and easy-to-write way of generating
 - The library should be small, simple, efficient and extensible — rather than solving every possible use case.
 
 ## Example code
-This example code is an example implemented in a minimal API .Net core project, serving a HTML page completely constructed using HtmlBuilder.
+This example code is an example implemented in a minimal API .Net web project, serving a HTML page completely constructed using HtmlBuilder.
 ```csharp
+using System.Text;
 using HarroDotNet.HtmlBuilder;
 using static HarroDotNet.HtmlBuilder.CommonAttributes;
 
@@ -36,62 +37,60 @@ app.MapGet("/", () =>
         new Html(Dir("ltr"), Lang("en"))
         {
             // Nested elements or self closing tags can be added through collection initializers.
-            // This makes it easy to write nested structures.
-            // This way reading and writing a HTML document is very similar to
-            // reading and writing plain HTML.
+            // This makes it easy to write nested structures. This way reading and writing a
+            // HTML document is very similar to  reading and writing plain HTML.
             new Head
             {
                 new Title { "Getting started" },
                 new Meta(Charset("utf-8")),
                 new Meta(Name("viewport"), Content("width=device-width, initial-scale=1")),
-                new Link(
-                    Href("https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"),
-                    Rel("stylesheet"),
-                    ("integrity","sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"),
-                    ("crossorigin", "anonymous")
-                ),
-                new Script(
-                    Src("https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"),
-                    ("integrity","sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"),
-                    ("crossorigin", "anonymous")
-                )
+                new Link(Href("https://cdn.simplecss.org/simple.min.css"), RelStylesheet),
             },
             new Body
             {
-                new H1 { "Text example" },
+                new H1 { (Raw)"Text example" },
                 new P
                 {
-                    // You directly pass strings in the collection initializer as content, these will be encoded by default.
-                    "The <br> tag in this line will be encoded and show up in the html page."
-                },
-                new P
-                {
+                    // You directly pass strings in the collection initializer as content,
+                    // these will be encoded by default.
+                    "The <br> tag in this line will be encoded and show up in the html page.",
+
                     // You can embed raw HTML content from a string.
-                    new Raw("This text will contain an actual <br> line break in the HTML output."),
+                    (Raw)
+                    """
+                    <br><br>
+                    This text will contain<br>
+                    actual line breaks<br>
+                    in the HTML output.<br>
+                    """,
                 },
-                new H1 { "List example" },
-                new Ul(Class("list-group"))
+                new H1 { (Raw)"List example" },
+                new Ul
                 {
                     // You can pass a collection of elements as an item in the collection initializer.
                     // This makes it simple to add projections of data inline.
                     Enumerable.Range(1, 10).Select(number =>
-                        new Li(Class("list-item"))
+                        new Li
                         {
-                            // Each element is rendered in sequence, so no intermediate
-                            // string interpolation or concatenation is needed.
-                            number.ToString(), " squared equals ", (number * number).ToString()
+                            // You canpass int and long values directly in the collection initializer.
+                            // These are rendered without intermediate string allocations.
+                            // Each value is rendered in sequence, so no intermediate
+                            // string interpolation, concatenation or conversion is needed.
+                            number,
+                            (Raw)" squared equals ",
+                            number * number
                         }
                     )
                 },
-                new H1 { "Table example" },
-                new Table(Class("table"))
+                new H1 { (Raw)"Table example" },
+                new Table
                 {
                     new Thead
                     {
                         new Tr
                         {
-                            new Th { "number" },
-                            new Th { "squared" },
+                            new Th { (Raw)"number" },
+                            new Th { (Raw)"squared" },
                         },
                     },
                     new Tbody
@@ -99,23 +98,23 @@ app.MapGet("/", () =>
                         Enumerable.Range(1, 10).Select(number =>
                             new Tr
                             {
-                                new Td { number.ToString() },
-                                new Td { (number * number).ToString()},
+                                new Th { number },
+                                new Td { number * number },
                             }
                         )
                     },
                 },
-                new H1 { "Link example" },
+                new H1 { (Raw) "Link example" },
                 new P
                 {
-                    "Visit the project page on ", new A(Href("https://github.com/harro-dot-net/HtmlBuilder")){ "GitHub" }
+                    (Raw)"Visit the project page on ", new A(Href("https://github.com/harro-dot-net/HtmlBuilder")){ (Raw)"GitHub" }
                 },
             }
         };
 
     // Wrapping the HTML element in a document will add a HTML5 DOCTYPE declaration.
     // The Render method will convert the nested structure to a string.
-    return Results.Text(new Document(html).Render(), "text/html");
+    return Results.Text(new Document(html).Render(), "text/html", Encoding.UTF8);
 });
 
 app.Run();
@@ -129,30 +128,31 @@ This will generate the following output:
         <title>Getting started</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+        <link href="https://cdn.simplecss.org/simple.min.css" rel="stylesheet">
     </head>
     <body>
         <h1>Text example</h1>
-        <p>The &lt;br &gt;tag in this line will be encoded and show up in the html page.</p>
-        <p>
-            This text will contain an actual <br>line break in the HTML output.
+        <p>The &lt;br&gt; tag in this line will be encoded and show up in the html page.<br>
+            <br>
+            This text will contain<br>
+            actual line breaks<br>
+            in the HTML output.<br>
         </p>
         <h1>List example</h1>
-        <ul class="list-group">
-            <li class="list-item">1 squared equals 1</li>
-            <li class="list-item">2 squared equals 4</li>
-            <li class="list-item">3 squared equals 9</li>
-            <li class="list-item">4 squared equals 16</li>
-            <li class="list-item">5 squared equals 25</li>
-            <li class="list-item">6 squared equals 36</li>
-            <li class="list-item">7 squared equals 49</li>
-            <li class="list-item">8 squared equals 64</li>
-            <li class="list-item">9 squared equals 81</li>
-            <li class="list-item">10 squared equals 100</li>
+        <ul>
+            <li>1 squared equals 1</li>
+            <li>2 squared equals 4</li>
+            <li>3 squared equals 9</li>
+            <li>4 squared equals 16</li>
+            <li>5 squared equals 25</li>
+            <li>6 squared equals 36</li>
+            <li>7 squared equals 49</li>
+            <li>8 squared equals 64</li>
+            <li>9 squared equals 81</li>
+            <li>10 squared equals 100</li>
         </ul>
         <h1>Table example</h1>
-        <table class="table">
+        <table>
             <thead>
                 <tr>
                     <th>number</th>
@@ -161,51 +161,49 @@ This will generate the following output:
             </thead>
             <tbody>
                 <tr>
-                    <td>1</td>
+                    <th>1</th>
                     <td>1</td>
                 </tr>
                 <tr>
-                    <td>2</td>
+                    <th>2</th>
                     <td>4</td>
                 </tr>
                 <tr>
-                    <td>3</td>
+                    <th>3</th>
                     <td>9</td>
                 </tr>
                 <tr>
-                    <td>4</td>
+                    <th>4</th>
                     <td>16</td>
                 </tr>
                 <tr>
-                    <td>5</td>
+                    <th>5</th>
                     <td>25</td>
                 </tr>
                 <tr>
-                    <td>6</td>
+                    <th>6</th>
                     <td>36</td>
                 </tr>
                 <tr>
-                    <td>7</td>
+                    <th>7</th>
                     <td>49</td>
                 </tr>
                 <tr>
-                    <td>8</td>
+                    <th>8</th>
                     <td>64</td>
                 </tr>
                 <tr>
-                    <td>9</td>
+                    <th>9</th>
                     <td>81</td>
                 </tr>
                 <tr>
-                    <td>10</td>
+                    <th>10</th>
                     <td>100</td>
                 </tr>
             </tbody>
         </table>
         <h1>Link example</h1>
-        <p>
-            Visit the project page on <a href="https://github.com/harro-dot-net/HtmlBuilder">GitHub</a>
-        </p>
+        <p>Visit the project page on <a href="https://github.com/harro-dot-net/HtmlBuilder">GitHub</a></p>
     </body>
 </html>
 ```
@@ -223,6 +221,7 @@ HTML elements can be populated with nested content using collection initializers
 - Any HTML element or self-closing tag.
 - Any collection of HTML elements or self-closing tags.
 - Strings (which are automatically HTML encoded by default).
+- int or long values (which are rendered to the output without string conversion).
 
 These content types can be mixed together within a single collection initializer.
 
