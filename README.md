@@ -72,13 +72,11 @@ app.MapGet("/", () =>
                     Enumerable.Range(1, 10).Select(number =>
                         new Li
                         {
-                            // You canpass int and long values directly in the collection initializer.
+                            // You can pass int and long values directly in the collection initializer.
                             // These are rendered without intermediate string allocations.
                             // Each value is rendered in sequence, so no intermediate
                             // string interpolation, concatenation or conversion is needed.
-                            number,
-                            (Raw)" squared equals ",
-                            number * number
+                            number, (Raw)" squared equals ", number * number
                         }
                     )
                 },
@@ -104,7 +102,7 @@ app.MapGet("/", () =>
                         )
                     },
                 },
-                new H1 { (Raw) "Link example" },
+                new H1 { (Raw)"Link example" },
                 new P
                 {
                     (Raw)"Visit the project page on ", new A(Href("https://github.com/harro-dot-net/HtmlBuilder")){ (Raw)"GitHub" }
