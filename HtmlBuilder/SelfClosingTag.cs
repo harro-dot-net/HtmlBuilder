@@ -3,16 +3,19 @@
 public class SelfClosingTag : IContentRenderer
 {
     private readonly string _tag;
+    private readonly bool _trailingSlash;
     private IAttributeBuilder _attributes = NoAttributes.Instance;
 
-    public SelfClosingTag(string tag)
+    public SelfClosingTag(string tag, bool trailingSlash)
     {
         _tag = tag;
+        _trailingSlash = trailingSlash;
     }
 
-    public SelfClosingTag(string tag, params IEnumerable<HtmlAttribute> attributes)
+    public SelfClosingTag(string tag, bool trailingSlash, params IEnumerable<Attribute> attributes)
     {
         _tag = tag;
+        _trailingSlash = trailingSlash;
 
         foreach (var attribute in attributes)
         {
@@ -20,13 +23,13 @@ public class SelfClosingTag : IContentRenderer
         }
     }
 
-    public SelfClosingTag AddAttribute(HtmlAttribute attribute)
+    public SelfClosingTag AddAttribute(Attribute attribute)
     {
         _attributes = _attributes.AddAttribute(attribute);
         return this;
     }
 
-    public SelfClosingTag AddAttributes(params IEnumerable<HtmlAttribute> attributes)
+    public SelfClosingTag AddAttributes(params IEnumerable<Attribute> attributes)
     {
         foreach (var a in attributes)
         {
@@ -41,6 +44,6 @@ public class SelfClosingTag : IContentRenderer
         append("<");
         append(_tag);
         _attributes.Render(append);
-        append(">");
+        append(_trailingSlash ? "/>" : ">");
     }
 }

@@ -84,8 +84,8 @@ public sealed class ScoreBoard
             new Div
             {
                 new Input(
-                    TypeText,
-                    Required,
+                    InputType.Text,
+                    Required.True,
                     Id("new-name"),
                     Name("Name"),
                     Placeholder("Enter name...")
@@ -94,8 +94,8 @@ public sealed class ScoreBoard
             new Div
             {
                 new Input(
-                    TypeNumber,
-                    Required,
+                    InputType.Number,
+                    Required.True,
                     Id("new-score"),
                     Name("Points"),
                     Placeholder("Enter score...")
@@ -104,7 +104,7 @@ public sealed class ScoreBoard
             new Div
             {
                 new Button(
-                    TypeButton,
+                    InputType.Button,
                     ("hx-post", ScoresEndpoint),
                     ("hx-trigger","click"),
                     ("hx-target", $"#{ScoreList}"),
@@ -115,7 +115,7 @@ public sealed class ScoreBoard
                 },
             },
             new Input(
-                TypeHidden,
+                InputType.Hidden,
                 Name("__RequestVerificationToken"),
                 Value(antiforgery.GetAndStoreTokens(context).RequestToken!)
             )

@@ -2,7 +2,7 @@
 
 public sealed class Comment(string text) : IContentRenderer
 {
-    private readonly Text _textContent = new(text);
+    private readonly EncodedText _textContent = new(text);
 
     public void Render(Action<string> append)
     {

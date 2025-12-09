@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using System.Numerics;
-
 namespace HarroDotNet.HtmlBuilder;
 
 public class Element : IEnumerable, IContentBuilder
@@ -14,7 +12,7 @@ public class Element : IEnumerable, IContentBuilder
         _tag = tag;
     }
 
-    public Element(string tag, params IEnumerable<HtmlAttribute> attributes)
+    public Element(string tag, params IEnumerable<Attribute> attributes)
     {
         _tag = tag;
 
@@ -40,13 +38,13 @@ public class Element : IEnumerable, IContentBuilder
         return this;
     }
 
-    public Element AddAttribute(HtmlAttribute attribute)
+    public Element AddAttribute(Attribute attribute)
     {
         _attributes = _attributes.AddAttribute(attribute);
         return this;
     }
 
-    public Element AddAttributes(params IEnumerable<HtmlAttribute> attributes)
+    public Element AddAttributes(params IEnumerable<Attribute> attributes)
     {
         foreach (var attribute in attributes)
         {
@@ -59,7 +57,7 @@ public class Element : IEnumerable, IContentBuilder
     #region Collection initializer
     public void Add(string text)
     {
-        _content = _content.AddContent(new Text(text));
+        _content = _content.AddContent(new EncodedText(text));
     }
 
     public void Add(int value)

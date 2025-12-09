@@ -28,14 +28,14 @@ IResult Home(HttpContext context, [FromServices] IAntiforgery antiforgery)
 }
 
 Html CreateHtml(string title, Body body) =>
-    new (Dir("ltr"), Lang("en"))
+    new (Dir.Ltr, Lang.En)
     {
         new Head
         {
-            new Title { new Raw(title) },
-            new Meta(Charset("utf-8")),
+            new Title { (Raw) title },
+            new Meta(Charset.Utf8),
             new Meta(Name("viewport"), Content("width=device-width, initial-scale=1")),
-            new Link(Href("https://cdn.simplecss.org/simple.min.css"), RelStylesheet),
+            new Link(Href("https://cdn.simplecss.org/simple.min.css"), Rel.Stylesheet),
             new Script(Src("https://unpkg.com/htmx.org@2.0.4/dist/htmx.js")),
         },
         body

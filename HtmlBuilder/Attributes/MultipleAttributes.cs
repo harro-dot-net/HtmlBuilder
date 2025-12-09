@@ -2,9 +2,9 @@
 
 internal sealed class MultipleAttributes : IAttributeBuilder
 {
-    private readonly List<HtmlAttribute> _attributes = [];
+    private readonly List<Attribute> _attributes = [];
 
-    public IAttributeBuilder AddAttribute(HtmlAttribute attribute)
+    public IAttributeBuilder AddAttribute(Attribute attribute)
     {
         _attributes.Add(attribute);
         return this;

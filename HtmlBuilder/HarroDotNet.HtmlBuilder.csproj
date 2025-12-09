@@ -1,19 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-	<LangVersion>latest</LangVersion>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-	<PackageId>HarroDotNet.HtmlBuilder</PackageId>
-	<Version>25.04.01</Version>
-	<Authors>Harro Lock</Authors>
-	<Discription>A simple and lightweight library to build HTML in C#</Discription>
-	<PackageTags>C#;.Net;Html;Builder;Generator</PackageTags>
-	<RepositoryUrl>https://github.com/harro-dot-net/HtmlBuilder</RepositoryUrl>
-	<PackageLicenseExpression>MIT</PackageLicenseExpression>
-	<PackageReadmeFile>README.md</PackageReadmeFile>
-	<PackageProjectUrl>https://github.com/harro-dot-net/HtmlBuilder</PackageProjectUrl>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<PackageId>HarroDotNet.HtmlBuilder</PackageId>
+		<Version>25.04.01</Version>
+		<Authors>Harro Lock</Authors>
+		<Discription>A simple and lightweight library to build HTML in C#</Discription>
+		<PackageTags>C#;.Net;Html;Builder;Generator</PackageTags>
+		<RepositoryUrl>https://github.com/harro-dot-net/HtmlBuilder</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageProjectUrl>https://github.com/harro-dot-net/HtmlBuilder</PackageProjectUrl>
+	</PropertyGroup>
 	<ItemGroup>
 		<None Include="..\README.md">
 			<Pack>true</Pack>
