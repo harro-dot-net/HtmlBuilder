@@ -9,5 +9,5 @@ public enum Hidden
 public readonly partial record struct Attribute
 {
     public static implicit operator Attribute(Hidden value) =>
-        value == Hidden.True ? ("hidden", "hidden") : default;
+        value == Hidden.True ? ("hidden", string.Empty) : default;
 }

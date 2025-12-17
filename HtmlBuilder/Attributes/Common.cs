@@ -2,7 +2,6 @@
 
 public static class CommonAttributes
 {
-    // Shared
     public static Attribute Id(string value) => ("id", value);
     public static Attribute Class(string value) => ("class", value);
     public static Attribute Style(string value) => ("style", value);
