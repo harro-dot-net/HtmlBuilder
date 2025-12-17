@@ -1,7 +1,8 @@
 > **⚠️ Breaking change — coming in v26.1**
 >
-> As of v26.1 the library changes how common attribute values are represented: several attributes that previously used factory methods with string literals are now strongly-typed enums.
-> This improves safety and IntelliSense, but is a breaking change for callers that passed arbitrary strings.
+> As of v26.1 the library changes how common attribute values are represented.
+> Several attributes that previously used factory methods with string literals are now strongly-typed enums.
+> This improves safety and IntelliSense, but is a breaking change usages of those specific factory methods.
 >
 > Quick summary:
 > - Use enum members for predefined attribute values (example: `Rel.Stylesheet`).
@@ -10,7 +11,7 @@
 >
 > Example — before / after
 >
-> Before (string factory):
+> Before (factory method):
 > ```csharp
 > new Link(Href("https://..."), Rel("stylesheet"))
 > ```
@@ -19,6 +20,7 @@
 > ```csharp
 > new Link(Href("https://..."), Rel.Stylesheet)
 > ```
+> Please plan to update your code when upgrading to v26.1 or later.
 
 # HtmlBuilder
 
