@@ -25,7 +25,7 @@ public sealed class LongContent(long value) : IContentRenderer
     private void RenderDigits(ulong value, Action<string> append)
     {
         const int MaxDigits = 20;
-        Span<byte> buffer = stackalloc byte[MaxDigits];
+        byte[] buffer = new byte[MaxDigits];
         int pos = MaxDigits;
 
         while (value > 0)

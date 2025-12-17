@@ -20,7 +20,4 @@
 			<PackagePath>README.md</PackagePath>
 		</None>
 	</ItemGroup>
-	<ItemGroup>
-	  <PackageReference Include="System.Text.Encodings.Web" Version="9.0.3" />
-	</ItemGroup>
 </Project>
