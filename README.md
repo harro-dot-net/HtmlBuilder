@@ -1,3 +1,25 @@
+> **⚠️ Breaking change — coming in v26.1**
+>
+> As of v26.1 the library changes how common attribute values are represented: several attributes that previously used factory methods with string literals are now strongly-typed enums.
+> This improves safety and IntelliSense, but is a breaking change for callers that passed arbitrary strings.
+>
+> Quick summary:
+> - Use enum members for predefined attribute values (example: `Rel.Stylesheet`).
+> - Factory methods remain for free-form attributes such as `id`, `class`, `name`.
+> - Custom attributes (tuples like `("data-foo","bar")`) are unchanged.
+>
+> Example — before / after
+>
+> Before (string factory):
+> ```csharp
+> new Link(Href("https://..."), Rel("stylesheet"))
+> ```
+>
+> After (enum-based):
+> ```csharp
+> new Link(Href("https://..."), Rel.Stylesheet)
+> ```
+
 # HtmlBuilder
 
 HtmlBuilder is a simple C# library for generating HTML documents directly from C# code. It allows you to create HTML structures in a readable, flexible, and intuitive way without the need for templating engines or complex frameworks.
@@ -31,31 +53,34 @@ var app = builder.Build();
 app.MapGet("/", () =>
 {
     var html =
-        // Attributes are passed to the constructor as tuples with 2 strings, a key and a value.
-        // (An empty value is not rendered to the output).
-        // For many common attributes (like 'id', 'class' etc.) there are factory methods which makes it easier to type and read.
-        new Html(Dir("ltr"), Lang("en"))
+        // Attributes are passed to the constructor of elements.
+        // For common standard attributes values (like charset="utf-8", rel="stylesheet" etc.)
+        // there enums defined that are implicitly converted to attributes.
+        new Html(Dir.Ltr, Lang.En)
         {
             // Nested elements or self closing tags can be added through collection initializers.
             // This makes it easy to write nested structures. This way reading and writing a
-            // HTML document is very similar to  reading and writing plain HTML.
+            // HTML document is very similar to reading and writing plain HTML.
             new Head
             {
                 new Title { "Getting started" },
-                new Meta(Charset("utf-8")),
-                new Meta(Name("viewport"), Content("width=device-width, initial-scale=1")),
-                new Link(Href("https://cdn.simplecss.org/simple.min.css"), RelStylesheet),
+                new Meta(Charset.Utf8),
+                // For many common attributes (like id, class, name, etc.) there are factory methods which
+                // makes it easier to type and read. For other attributes you can pass a tuple with 2 strings
+                // that will also be implicitly converted to an attribute.
+                new Meta(Name("viewport"), Content("width=device-width, initial-scale=1"), ("customattribute","value")),
+                new Link(Href("https://cdn.simplecss.org/simple.min.css"), Rel.Stylesheet),
             },
             new Body
             {
-                new H1 { (Raw)"Text example" },
+                new H1 { "Text example" },
                 new P
                 {
                     // You directly pass strings in the collection initializer as content,
                     // these will be encoded by default.
                     "The <br> tag in this line will be encoded and show up in the html page.",
 
-                    // You can embed raw HTML content from a string.
+                    // You can also embed raw HTML content from a string.
                     (Raw)
                     """
                     <br><br>
@@ -64,7 +89,7 @@ app.MapGet("/", () =>
                     in the HTML output.<br>
                     """,
                 },
-                new H1 { (Raw)"List example" },
+                new H1 { "List example" },
                 new Ul
                 {
                     // You can pass a collection of elements as an item in the collection initializer.
@@ -76,19 +101,19 @@ app.MapGet("/", () =>
                             // These are rendered without intermediate string allocations.
                             // Each value is rendered in sequence, so no intermediate
                             // string interpolation, concatenation or conversion is needed.
-                            number, (Raw)" squared equals ", number * number
+                            number, " squared equals ", number * number
                         }
                     )
                 },
-                new H1 { (Raw)"Table example" },
+                new H1 { "Table example" },
                 new Table
                 {
                     new Thead
                     {
                         new Tr
                         {
-                            new Th { (Raw)"number" },
-                            new Th { (Raw)"squared" },
+                            new Th { "number" },
+                            new Th { "squared" },
                         },
                     },
                     new Tbody
@@ -102,10 +127,10 @@ app.MapGet("/", () =>
                         )
                     },
                 },
-                new H1 { (Raw)"Link example" },
+                new H1 { "Link example" },
                 new P
                 {
-                    (Raw)"Visit the project page on ", new A(Href("https://github.com/harro-dot-net/HtmlBuilder")){ (Raw)"GitHub" }
+                    "Visit the project page on ", new A(Href("https://github.com/harro-dot-net/HtmlBuilder")){ "GitHub" }
                 },
             }
         };
@@ -122,95 +147,89 @@ This will generate the following output:
 ```html
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
-    <head>
-        <title>Getting started</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://cdn.simplecss.org/simple.min.css" rel="stylesheet">
-    </head>
-    <body>
-        <h1>Text example</h1>
-        <p>The &lt;br&gt; tag in this line will be encoded and show up in the html page.<br>
-            <br>
-            This text will contain<br>
-            actual line breaks<br>
-            in the HTML output.<br>
-        </p>
-        <h1>List example</h1>
-        <ul>
-            <li>1 squared equals 1</li>
-            <li>2 squared equals 4</li>
-            <li>3 squared equals 9</li>
-            <li>4 squared equals 16</li>
-            <li>5 squared equals 25</li>
-            <li>6 squared equals 36</li>
-            <li>7 squared equals 49</li>
-            <li>8 squared equals 64</li>
-            <li>9 squared equals 81</li>
-            <li>10 squared equals 100</li>
-        </ul>
-        <h1>Table example</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>number</th>
-                    <th>squared</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th>1</th>
-                    <td>1</td>
-                </tr>
-                <tr>
-                    <th>2</th>
-                    <td>4</td>
-                </tr>
-                <tr>
-                    <th>3</th>
-                    <td>9</td>
-                </tr>
-                <tr>
-                    <th>4</th>
-                    <td>16</td>
-                </tr>
-                <tr>
-                    <th>5</th>
-                    <td>25</td>
-                </tr>
-                <tr>
-                    <th>6</th>
-                    <td>36</td>
-                </tr>
-                <tr>
-                    <th>7</th>
-                    <td>49</td>
-                </tr>
-                <tr>
-                    <th>8</th>
-                    <td>64</td>
-                </tr>
-                <tr>
-                    <th>9</th>
-                    <td>81</td>
-                </tr>
-                <tr>
-                    <th>10</th>
-                    <td>100</td>
-                </tr>
-            </tbody>
-        </table>
-        <h1>Link example</h1>
-        <p>Visit the project page on <a href="https://github.com/harro-dot-net/HtmlBuilder">GitHub</a></p>
-    </body>
+<head>
+    <title>Getting started</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" customattribute="value">
+    <link href="https://cdn.simplecss.org/simple.min.css" rel="stylesheet">
+</head>
+<body>
+    <h1>Text example</h1>
+    <p>The &lt;br&gt; tag in this line will be encoded and show up in the html page.<br><br>
+        This text will contain<br>
+        actual line breaks<br>
+        in the HTML output.<br></p>
+    <h1>List example</h1>
+    <ul>
+        <li>1 squared equals 1</li>
+        <li>2 squared equals 4</li>
+        <li>3 squared equals 9</li>
+        <li>4 squared equals 16</li>
+        <li>5 squared equals 25</li>
+        <li>6 squared equals 36</li>
+        <li>7 squared equals 49</li>
+        <li>8 squared equals 64</li>
+        <li>9 squared equals 81</li>
+        <li>10 squared equals 100</li>
+    </ul>
+    <h1>Table example</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>number</th>
+                <th>squared</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>1</th>
+                <td>1</td>
+            </tr>
+            <tr>
+                <th>2</th>
+                <td>4</td>
+            </tr>
+            <tr>
+                <th>3</th>
+                <td>9</td>
+            </tr>
+            <tr>
+                <th>4</th>
+                <td>16</td>
+            </tr>
+            <tr>
+                <th>5</th>
+                <td>25</td>
+            </tr>
+            <tr>
+                <th>6</th>
+                <td>36</td>
+            </tr>
+            <tr>
+                <th>7</th>
+                <td>49</td>
+            </tr>
+            <tr>
+                <th>8</th>
+                <td>64</td>
+            </tr>
+            <tr>
+                <th>9</th>
+                <td>81</td>
+            </tr>
+            <tr>
+                <th>10</th>
+                <td>100</td>
+            </tr>
+        </tbody>
+    </table>
+    <h1>Link example</h1>
+    <p>Visit the project page on <a href="https://github.com/harro-dot-net/HtmlBuilder">GitHub</a></p>
+</body>
 </html>
 ```
 
 ## How It Works
-
-### Attributes
-
-Attributes in the HTML elements are represented as tuples of key-value pairs, where the key is the attribute name (e.g., `"dir"`) and the value is the attribute's value (e.g., `"ltr"`). You can pass any number of attributes through the constructor of HTML elements or self-closing tags.
 
 ### Content
 
@@ -222,6 +241,10 @@ HTML elements can be populated with nested content using collection initializers
 - int or long values (which are rendered to the output without string conversion).
 
 These content types can be mixed together within a single collection initializer.
+
+### Attributes
+
+Attributes in the HTML elements are represented as tuples of key-value pairs, where the key is the attribute name (e.g., `"rel"`) and the value is the attribute's value (e.g., `"sylesheet"`). You can pass any number of attributes through the constructor of HTML elements or self-closing tags.
 
 ### Generating Output
 

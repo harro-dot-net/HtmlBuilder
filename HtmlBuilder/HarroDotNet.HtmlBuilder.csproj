@@ -5,7 +5,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<PackageId>HarroDotNet.HtmlBuilder</PackageId>
-		<Version>25.04.01</Version>
+		<Version>26.0.0</Version>
 		<Authors>Harro Lock</Authors>
 		<Discription>A simple and lightweight library to build HTML in C#</Discription>
 		<PackageTags>C#;.Net;Html;Builder;Generator</PackageTags>
